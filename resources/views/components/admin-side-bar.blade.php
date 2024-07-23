@@ -21,12 +21,12 @@
 
         </li>
 
-        <li class="menu-label">UI Elements</li>
+        <li class="menu-label">Home</li>
         <li>
-            <a href="widgets.html">
+            <a href="{{url('admin/home_banner')}}">
                 <div class="parent-icon"><i class='bx bx-cookie'></i>
                 </div>
-                <div class="menu-title">Widgets</div>
+                <div class="menu-title">Home Banner</div>
             </a>
         </li>
         <li>
