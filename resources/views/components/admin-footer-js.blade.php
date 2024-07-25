@@ -75,6 +75,9 @@
                         // Hiển thị thông báo và khôi phục trạng thái nút
                         if (result.status === 'success') {
                             showAlert('success', result.message);
+                            if(result.data.reload != undefined){
+                                window.location.href = window.location.href;
+                            }
                         } else {
                             // Hiển thị lỗi
                             $.each(result.message, function (key, value) {
@@ -94,7 +97,46 @@
             }
         });
     });
+    function deleteData(id,table)
+    {
+        let text = "Are you sure want to delete";
+        if (confirm(text) == true) {
+            text = "You pressed OK!";
+            $.ajax({
+                type: 'GET',
+                url: "{{url('admin/deleteData')}}/"+id+"/"+table+"",
+                data: '',
+                cache: false,
+                contentType: false,
+                processData: false,
+                success: function (result) {
+                    // Hiển thị thông báo và khôi phục trạng thái nút
+                    if (result.status === 'success') {
+                        showAlert('success', result.message);
+                        if(result.data.reload != undefined){
+                            window.location.href = window.location.href;
+                        }
+                    } else {
+                        // Hiển thị lỗi
+                        $.each(result.message, function (key, value) {
+                            showAlert('error', value[0]);
+                        });
+                    }
 
+                },
+                error: function (xhr) {
+                    // Hiển thị lỗi
+                    $.each(xhr.responseJSON.message, function (key, value) {
+                        showAlert('error', value[0]);
+                    });
+                    $('#submitButton').html(html1);  // Khôi phục trạng thái nút
+                }
+            });
+        } else {
+
+        }
+
+    }
 </script>
 <script>
     function showAlert(status, message) {

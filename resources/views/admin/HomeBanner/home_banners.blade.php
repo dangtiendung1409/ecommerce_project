@@ -30,7 +30,7 @@
             <h6 class="mb-0 text-uppercase">Home Banner</h6>
             <hr/>
             <div class="col">
-                <button type="button" class="btn btn-info px-5 radius-30">Add Home Banner</button>
+                <button type="button" onclick="saveData('','','','')" class="btn btn-info px-5 radius-30" data-bs-toggle="modal" data-bs-target="#exampleModal">Add Home Banner</button>
             </div>
             <div class="card">
                 <div class="card-body">
@@ -42,21 +42,29 @@
                                 <th>Text</th>
                                 <th>Link</th>
                                 <th>Image</th>
-                                <th>Create_at</th>
-                                <th>Update_at</th>
+                                <th>Action</th>
                             </tr>
                             </thead>
                             <tbody>
                             <tr>
                                 @foreach($data as $list)
-                                    <td>Michael Bruce</td>
-                                    <td>Javascript Developer</td>
-                                    <td>Singapore</td>
-                                    <td>29</td>
-                                    <td>2011/06/27</td>
-                                    <td>$183,000</td>
+                                    <td>{{$list->id}}</td>
+                                    <td>{{$list->text}}</td>
+                                    <td>{{$list->link}}</td>
+                                    <td>
+                                        <img src="{{ asset('images/' . $list->image) }}" alt="Banner Image" width="100" height="100">
+                                    </td>
+                                    <td>
+                                        <button type="button"
+                                                onclick="saveData('{{$list->id}}','{{$list->text}}','{{$list->link}}','{{$list->image}}')"
+                                                class="btn btn-info px-5 radius-30"
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#exampleModal">Update</button>
+                                        <button onclick="deleteData('{{$list->id}}','home_banners')" class="btn btn-danger px-5 radius-30">Delete</button>
+                                    </td>
                                 @endforeach
                             </tr>
+
 
                             </tbody>
                             <tfoot>
@@ -65,12 +73,81 @@
                                 <th>Text</th>
                                 <th>Link</th>
                                 <th>Image</th>
-                                <th>Create_at</th>
-                                <th>Update_at</th>
                             </tr>
                             </tfoot>
                         </table>
                     </div>
                 </div>
             </div>
+            <!-- Modal -->
+            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Home Banner</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <form id="formSubmit" action="{{url('admin/updateHomeBanner')}}" method="post" enctype="multipart/form-data">
+                            @csrf
+                        <div class="modal-body">
+                            <div class="border p-4 rounded">
+                                <div class="card-title d-flex align-items-center">
+                                    <div><i class="bx bxs-user me-1 font-22 text-info"></i>
+                                    </div>
+{{--                                    <h5 class="mb-0 text-info">User Registration</h5>--}}
+                                </div>
+                                <hr>
+                                <div class="row mb-3">
+                                    <label for="enter_text" class="col-sm-3 col-form-label">Enter Your Text</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" name="text" class="form-control" id="enter_text" placeholder="Enter Your Text" required>
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <label for="enter_link" class="col-sm-3 col-form-label">Enter Your Link</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" name="link" class="form-control" id="enter_link" placeholder="Link" required>
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <label for="enter_image" class="col-sm-3 col-form-label">Image</label>
+                                    <div class="col-sm-9">
+                                        <input name="image" type="file" class="form-control" id="photo" >
+                                    </div>
+                                    <div id="image_key">
+                                        <img src="" id="imgPreview" height="200px" width="200px">
+                                    </div>
+                                </div>
+                                <input type="hidden" name="id" id="enter_id" >
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <span id="submitButton">
+                                <button type="submit" class="btn btn-primary">Save changes</button>
+                            </span>
+
+                        </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+    <script>
+        function saveData(id,text,link,image) {
+              $('#enter_id').val(id);
+              $('#enter_text').val(text);
+              $('#enter_link').val(link);
+
+            if(image == ''){
+                var key_image = "{{ asset('images/upload.png') }}";
+                $('photo').prop('required',true);
+            } else {
+                var key_image = "{{ asset('images') }}/" + image;
+                $('photo').prop('required',false);
+            }
+            var html ='<img src="'+key_image+'"  id="imgPreview" height="200px" width="200px">';
+             $('#image_key').html(html);
+        }
+    </script>
 @endsection
