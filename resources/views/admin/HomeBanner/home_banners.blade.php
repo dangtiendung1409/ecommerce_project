@@ -30,7 +30,7 @@
             <h6 class="mb-0 text-uppercase">Home Banner</h6>
             <hr/>
             <div class="col">
-                <button type="button" onclick="saveData('','','','')" class="btn btn-info px-5 radius-30" data-bs-toggle="modal" data-bs-target="#exampleModal">Add Home Banner</button>
+                <button type="button" onclick="saveData('0','','','')" class="btn btn-info px-5 radius-30" data-bs-toggle="modal" data-bs-target="#exampleModal">Add Home Banner</button>
             </div>
             <div class="card">
                 <div class="card-body">
@@ -46,8 +46,8 @@
                             </tr>
                             </thead>
                             <tbody>
+                            @foreach($data as $list)
                             <tr>
-                                @foreach($data as $list)
                                     <td>{{$list->id}}</td>
                                     <td>{{$list->text}}</td>
                                     <td>{{$list->link}}</td>
@@ -62,9 +62,8 @@
                                                 data-bs-target="#exampleModal">Update</button>
                                         <button onclick="deleteData('{{$list->id}}','home_banners')" class="btn btn-danger px-5 radius-30">Delete</button>
                                     </td>
-                                @endforeach
                             </tr>
-
+                            @endforeach
 
                             </tbody>
                             <tfoot>

@@ -54,6 +54,16 @@
 
 <script>
     $(document).ready(function () {
+        // Kiểm tra nếu có thông báo trong sessionStorage và hiển thị thông báo đó
+        var message = sessionStorage.getItem('alertMessage');
+        var type = sessionStorage.getItem('alertType');
+        if (message && type) {
+            showAlert(type, message);
+            sessionStorage.removeItem('alertMessage');
+            sessionStorage.removeItem('alertType');
+        }
+
+        // Xử lý sự kiện submit form
         $('#formSubmit').on('submit', function(e) {
             if ($(this).parsley().validate()) {
                 e.preventDefault();
@@ -61,8 +71,7 @@
                 var html = '<button class="btn btn-primary" type="button" disabled=""> <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>Loading...</button>';
                 var html1 = '<input type="submit" id="submitButton" class="btn btn-primary px-4" />';
 
-                // Đặt trạng thái nút thành "loading"
-                $('#submitButton').html(html);
+                $('#submitButton').html(html); // Đặt trạng thái nút thành "loading"
 
                 $.ajax({
                     type: 'POST',
@@ -72,72 +81,76 @@
                     contentType: false,
                     processData: false,
                     success: function (result) {
-                        // Hiển thị thông báo và khôi phục trạng thái nút
                         if (result.status === 'success') {
-                            showAlert('success', result.message);
-                            if(result.data.reload != undefined){
+                            // Lưu thông báo vào sessionStorage
+                            sessionStorage.setItem('alertMessage', result.message);
+                            sessionStorage.setItem('alertType', 'success');
+
+                            if (result.data.reload != undefined) {
                                 window.location.href = window.location.href;
                             }
                         } else {
-                            // Hiển thị lỗi
                             $.each(result.message, function (key, value) {
                                 showAlert('error', value[0]);
                             });
                         }
-                        $('#submitButton').html(html1);  // Khôi phục trạng thái nút
+                        $('#submitButton').html(html1); // Khôi phục trạng thái nút
                     },
                     error: function (xhr) {
-                        // Hiển thị lỗi
                         $.each(xhr.responseJSON.message, function (key, value) {
                             showAlert('error', value[0]);
                         });
-                        $('#submitButton').html(html1);  // Khôi phục trạng thái nút
+                        $('#submitButton').html(html1); // Khôi phục trạng thái nút
                     }
                 });
             }
         });
-    });
-    function deleteData(id,table)
-    {
-        let text = "Are you sure want to delete";
-        if (confirm(text) == true) {
-            text = "You pressed OK!";
-            $.ajax({
-                type: 'GET',
-                url: "{{url('admin/deleteData')}}/"+id+"/"+table+"",
-                data: '',
-                cache: false,
-                contentType: false,
-                processData: false,
-                success: function (result) {
-                    // Hiển thị thông báo và khôi phục trạng thái nút
-                    if (result.status === 'success') {
-                        showAlert('success', result.message);
-                        if(result.data.reload != undefined){
-                            window.location.href = window.location.href;
+
+        // Hàm deleteData để xử lý việc xóa dữ liệu
+        window.deleteData = function(id, table) {
+            if (confirm("Are you sure want to delete") == true) {
+                $.ajax({
+                    type: 'GET',
+                    url: "{{url('admin/deleteData')}}/"+id+"/"+table+"",
+                    data: '',
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    success: function (result) {
+                        if (result.status === 'success') {
+                            // Lưu thông báo vào sessionStorage
+                            sessionStorage.setItem('alertMessage', result.message);
+                            sessionStorage.setItem('alertType', 'success');
+
+                            if (result.data.reload != undefined) {
+                                window.location.href = window.location.href;
+                            }
+                        } else {
+                            $.each(result.message, function (key, value) {
+                                showAlert('error', value[0]);
+                            });
                         }
-                    } else {
-                        // Hiển thị lỗi
-                        $.each(result.message, function (key, value) {
+                    },
+                    error: function (xhr) {
+                        $.each(xhr.responseJSON.message, function (key, value) {
                             showAlert('error', value[0]);
                         });
                     }
-
-                },
-                error: function (xhr) {
-                    // Hiển thị lỗi
-                    $.each(xhr.responseJSON.message, function (key, value) {
-                        showAlert('error', value[0]);
-                    });
-                    $('#submitButton').html(html1);  // Khôi phục trạng thái nút
-                }
-            });
-        } else {
-
+                });
+            }
         }
+    });
 
+    // Hàm showAlert để hiển thị thông báo
+    function showAlert(type, message) {
+        if (type === 'success') {
+            alert('Success: ' + message);
+        } else if (type === 'error') {
+            alert('Error: ' + message);
+        }
     }
 </script>
+
 <script>
     function showAlert(status, message) {
         // Map status to Toastr type

@@ -24,9 +24,16 @@
         <li class="menu-label">Home</li>
         <li>
             <a href="{{url('admin/home_banner')}}">
-                <div class="parent-icon"><i class='bx bx-cookie'></i>
+                <div class="parent-icon"><i class='bx bx-home'></i>
                 </div>
                 <div class="menu-title">Home Banner</div>
+            </a>
+        </li>
+        <li>
+            <a href="{{url('admin/manage_size')}}">
+                <div class="parent-icon"><i class='bx bx-cookie'></i>
+                </div>
+                <div class="menu-title">Manage Size</div>
             </a>
         </li>
         <li>
