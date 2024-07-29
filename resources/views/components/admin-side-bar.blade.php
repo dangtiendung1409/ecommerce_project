@@ -37,6 +37,13 @@
             </a>
         </li>
         <li>
+            <a href="{{url('admin/manage_color')}}">
+                <div class="parent-icon"><i class='bx bx-brush'></i>
+                </div>
+                <div class="menu-title">Manage Color</div>
+            </a>
+        </li>
+        <li>
             <a href="javascript:;" class="has-arrow">
                 <div class="parent-icon"><i class='bx bx-cart'></i>
                 </div>

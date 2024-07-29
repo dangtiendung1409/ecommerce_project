@@ -3,14 +3,13 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Size;
-use App\Traits\ApiResponse;
+use App\Models\Color;
 use Illuminate\Http\Request;
+use App\Traits\ApiResponse;
 use Illuminate\Support\Facades\Auth;
 use Validator;
 
-
-class  sizeController extends Controller
+class colorController extends Controller
 {
     use ApiResponse;
     /**
@@ -18,8 +17,8 @@ class  sizeController extends Controller
      */
     public function index()
     {
-        $data = Size::get();
-        return view('admin/Size/size',get_defined_vars());
+        $data = Color::get();
+        return view('admin/Color/color',get_defined_vars());
     }
 
     /**
@@ -37,14 +36,14 @@ class  sizeController extends Controller
     {
         $validation = Validator::make($request->all(),[
             'text'    => 'required|string|max:255',
-
+            'value'    => 'required|string|max:255',
         ]);
-            Size::updateOrCreate(
-                ['id' =>$request->id],
-                ['text'=>$request->text]
-            );
-            return $this->success(['reload'=>true],'Successfully updated');
-        }
+        Color::updateOrCreate(
+            ['id' =>$request->id],
+            ['text'=>$request->text, 'value'=>$request->value]
+        );
+        return $this->success(['reload'=>true],'Successfully updated');
+    }
 
     /**
      * Display the specified resource.
