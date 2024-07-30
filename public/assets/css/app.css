@@ -808,7 +808,7 @@ a {
 	color: #32393f;
   }
 
-  
+
   .w_chart canvas {
 	position: absolute;
 	top: 0;
@@ -1723,11 +1723,11 @@ a {
 .text-facebook{
 	color: #3b5998!important
  }
- 
+
  .text-twitter{
 	 color: #55acee!important
   }
- 
+
   .text-youtube{
 	 color: #e52d27!important
   }
@@ -2595,4 +2595,8 @@ input.search-control-2::placeholder {
 	.chat-top-header-menu {
 		display: none
 	}
+}
+.box_color{
+    height: 20px;
+    width: 20px;
 }

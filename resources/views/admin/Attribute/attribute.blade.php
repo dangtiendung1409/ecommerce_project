@@ -1,16 +1,16 @@
 @extends("admin/layout")
 @section("content")
-    <div class="page-wrapper">
+<div class="page-wrapper">
         <div class="page-content">
             <!--breadcrumb-->
             <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
-                <div class="breadcrumb-title pe-3">Color</div>
+                <div class="breadcrumb-title pe-3">Attribute</div>
                 <div class="ps-3">
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb mb-0 p-0">
                             <li class="breadcrumb-item"><a href="javascript:;"><i class="bx bx-home-alt"></i></a>
                             </li>
-                            <li class="breadcrumb-item active" aria-current="page">Update Color</li>
+                            <li class="breadcrumb-item active" aria-current="page">Update Attribute</li>
                         </ol>
                     </nav>
                 </div>
@@ -27,10 +27,10 @@
                     </div>
                 </div>
             </div>
-            <h6 class="mb-0 text-uppercase">Color List</h6>
+            <h6 class="mb-0 text-uppercase">Attribute List</h6>
             <hr/>
             <div class="col">
-                <button type="button" onclick="saveData('0','','')" class="btn btn-info px-5 radius-30" data-bs-toggle="modal" data-bs-target="#exampleModal">Add Color</button>
+                <button type="button" onclick="saveData('0','','')" class="btn btn-info px-5 radius-30" data-bs-toggle="modal" data-bs-target="#exampleModal">Add Attribute</button>
             </div>
             <div class="card">
                 <div class="card-body">
@@ -39,8 +39,8 @@
                             <thead>
                             <tr>
                                 <th>Id</th>
-                                <th>Text</th>
-                                <th>Color</th>
+                                <th>Name</th>
+                                <th>Slug</th>
                                 <th>Create_at</th>
                                 <th>Update_at</th>
                                 <th>Action</th>
@@ -48,28 +48,28 @@
                             </thead>
                             <tbody>
                             @foreach($data as $list)
-                                <tr>
-                                    <td>{{$list->id}}</td>
-                                    <td>{{$list->text}}</td>
-                                    <td class="box_color" style="background-color: {{$list->value}}"></td>
-                                    <td>{{ $list->created_at->format('d-m-Y') }}</td>
-                                    <td>{{ $list->updated_at->format('d-m-Y') }}</td>
-                                    <td>
-                                        <button type="button"
-                                                onclick="saveData('{{$list->id}}','{{$list->text}}','{{$list->value}}')"
-                                                class="btn btn-info px-5 radius-30"
-                                                data-bs-toggle="modal"
-                                                data-bs-target="#exampleModal">Update</button>
-                                        <button onclick="deleteData('{{$list->id}}','colors')" class="btn btn-danger px-5 radius-30">Delete</button>
-                                    </td>
-                                </tr>
+                            <tr>
+                                <td>{{$list->id}}</td>
+                                <td>{{$list->name}}</td>
+                                <td>{{$list->slug}}</td>
+                                <td>{{ $list->created_at->format('d-m-Y') }}</td>
+                                <td>{{ $list->updated_at->format('d-m-Y') }}</td>
+                                <td>
+                                    <button type="button"
+                                            onclick="saveData('{{$list->id}}','{{$list->name}}','{{$list->slug}}')"
+                                            class="btn btn-info px-5 radius-30"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#exampleModal">Update</button>
+                                    <button onclick="deleteData('{{$list->id}}','attributes')" class="btn btn-danger px-5 radius-30">Delete</button>
+                                </td>
+                            </tr>
                             @endforeach
                             </tbody>
                             <tfoot>
                             <tr>
                                 <th>Id</th>
-                                <th>Text</th>
-                                <th>Color</th>
+                                <th>Name</th>
+                                <th>Slug</th>
                                 <th>Create_at</th>
                                 <th>Update_at</th>
                                 <th>Action</th>
@@ -84,10 +84,10 @@
                 <div class="modal-dialog modal-lg">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel">Size</h5>
+                            <h5 class="modal-title" id="exampleModalLabel">Attribute</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
-                        <form id="formSubmit" action="{{url('admin/updateColor')}}" method="post" enctype="multipart/form-data">
+                        <form id="formSubmit" action="{{url('admin/update_attribute_name')}}" method="post" enctype="multipart/form-data">
                             @csrf
                             <div class="modal-body">
                                 <div class="border p-4 rounded">
@@ -98,15 +98,15 @@
                                     </div>
                                     <hr>
                                     <div class="row mb-3">
-                                        <label for="enter_text" class="col-sm-3 col-form-label">Enter Your Text</label>
+                                        <label for="enter_name" class="col-sm-3 col-form-label">Enter Your Name</label>
                                         <div class="col-sm-9">
-                                            <input type="text" name="text" class="form-control" id="enter_text" placeholder="Enter Your Text" required>
+                                            <input type="text" name="name" class="form-control" id="enter_name" placeholder="Enter Your Name" required>
                                         </div>
                                     </div>
                                     <div class="row mb-3">
-                                        <label for="enter_value" class="col-sm-3 col-form-label">Enter Your Hex color</label>
+                                        <label for="enter_slug" class="col-sm-3 col-form-label">Enter Your Slug</label>
                                         <div class="col-sm-9">
-                                            <input type="text" name="value" class="form-control" id="enter_value" placeholder="Enter Your Value" required>
+                                            <input type="text" name="slug" class="form-control" id="enter_slug" placeholder="Enter Your Slug" required>
                                         </div>
                                     </div>
 
@@ -125,10 +125,10 @@
                 </div>
             </div>
             <script>
-                function saveData(id,text,value) {
+                function saveData(id,name,slug) {
                     $('#enter_id').val(id);
-                    $('#enter_text').val(text);
-                    $('#enter_value').val(value)
+                    $('#enter_name').val(name);
+                    $('#enter_slug').val(slug)
                 }
             </script>
 @endsection
