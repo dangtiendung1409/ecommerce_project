@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\dashboardController;
 use App\Http\Controllers\Admin\sizeController;
 use App\Http\Controllers\Admin\colorController;
 use App\Http\Controllers\Admin\attributeController;
+use App\Http\Controllers\Admin\categoryController;
 Route::get('/dashboard', function () {
     return view('admin/index');
 });
@@ -31,8 +32,13 @@ Route::post('/updateColor',[colorController::class,'store']);
 Route::get('/attribute_name',[attributeController::class,'index_attribute_name']);
 Route::post('/update_attribute_name',[attributeController::class,'store_attribute_name']);
 
+//Attributes value
 Route::get('/attribute_value',[attributeController::class,'index_attribute_value']);
 Route::post('/update_attribute_value',[attributeController::class,'store_attribute_value']);
+
+//Category
+Route::get('/category',[categoryController::class,'index']);
+Route::post('/updateCategory',[categoryController::class,'store']);
 
 // delete data
 Route::get('/deleteData/{id?}/{table?}',[dashboardController::class,'deleteData']);

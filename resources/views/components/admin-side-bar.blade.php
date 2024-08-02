@@ -63,7 +63,7 @@
                 <div class="menu-title">Category</div>
             </a>
             <ul>
-                <li> <a href="{{url('admin/Category')}}"><i class="bx bx-right-arrow-alt"></i>Category</a>
+                <li> <a href="{{url('admin/category')}}"><i class="bx bx-right-arrow-alt"></i>Category</a>
                 </li>
             </ul>
         </li>
