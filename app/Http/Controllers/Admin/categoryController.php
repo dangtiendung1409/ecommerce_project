@@ -26,28 +26,40 @@ class categoryController extends Controller
         $validation = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
             'slug' => 'required|string|max:255',
-            'image' => 'mimes:jpeg,png,jpg,gif|max:5120',//max 5 MB
-             'id' => 'required'
+            'image' => 'mimes:jpeg,png,jpg,gif,webp|max:5120',//max 5 MB
+            'id' => 'required'
         ]);
         if ($validation->fails()) {
             return response()->json(['status' => 'error', 'message' => $validation->errors()], 400);
 //            return response()->json(['status'=>400,'message'=>$validation->errors()->first()]);
         } else {
+
+            $image_name = null;
             if ($request->hasFile('image')) {
-                $image_name = $this->saveImage($request->file('image')); // Gọi phương thức saveImage từ trait SaveFile
+                $image_name = $this->saveImage($request->file('image'), '', 'images/categories'); // Truyền đường dẫn lưu tệp
             } elseif ($request->id > 0) {
                 $image_name = Category::where('id', $request->id)->pluck('image')->first();
-            } else {
-                $image_name = null;
             }
-            Category::updateOrCreate(
-                ['id' => $request->id],
-                ['name' => $request->name,
-                    'slug' => $request->slug,
-                    'image' => $image_name
-                ]
-            );
-            return $this->success(['reload' => true], 'Successfully updated');
+
+            if($request->parent_category_id != 0 ) {
+                Category::updateOrCreate(
+                    ['id' => $request->id],
+                    ['name' => $request->name,
+                        'slug' => $request->slug,
+                        'image' => $image_name,
+                        'parent_category_id' => $request->parent_category_id
+                    ]
+                );
+            }else{
+                Category::updateOrCreate(
+                    ['id' => $request->id],
+                    ['name' => $request->name,
+                        'slug' => $request->slug,
+                        'image' => $image_name,
+                    ]
+                );
+            }
+                return $this->success(['reload' => true], 'Successfully updated');
+            }
         }
-    }
 }

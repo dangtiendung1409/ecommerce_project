@@ -54,7 +54,7 @@
                                 <td>{{$list->name}}</td>
                                 <td>{{$list->slug}}</td>
                                 <td>
-                                    <img src="{{ asset('images/' . $list->image) }}" alt="Banner Image" width="100" height="100">
+                                    <img src="{{ asset('images/categories/' . $list->image) }}" alt="Banner Image" width="100" height="100">
                                 </td>
                                 <td>{{ $list->created_at->format('d-m-Y') }}</td>
                                 <td>{{ $list->updated_at->format('d-m-Y') }}</td>
@@ -113,6 +113,19 @@
                                         <label for="enter_slug" class="col-sm-3 col-form-label">Enter Your Slug</label>
                                         <div class="col-sm-9">
                                             <input type="text" name="slug" class="form-control" id="enter_slug" placeholder="Enter Your Slug" required>
+                                        </div>
+                                    </div>
+                                    <div class="row mb-3">
+                                        <label for="enter_text" class="col-sm-3 col-form-label">Parent category id</label>
+                                        <div class="col-sm-9">
+                                            <select class="form-control" name="parent_category_id" id="attributes_id">
+                                                <option value="0">Select Parent Id</option>
+                                                @foreach($data as $list1)
+                                                    <option value="{{$list1->id}}">
+                                                        {{$list1->name}}
+                                                    </option>
+                                                @endforeach
+                                            </select>
                                         </div>
                                     </div>
                                     <div class="row mb-3">

@@ -52,7 +52,7 @@
                                     <td>{{$list->text}}</td>
                                     <td>{{$list->link}}</td>
                                     <td>
-                                        <img src="{{ asset('images/' . $list->image) }}" alt="Banner Image" width="100" height="100">
+                                        <img src="{{ asset('images/homeBanner/' . $list->image) }}" alt="Banner Image" width="100" height="100">
                                     </td>
                                     <td>
                                         <button type="button"

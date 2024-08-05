@@ -41,7 +41,7 @@ class homeBannerController extends Controller
             return response()->json(['status' => 'error', 'message' => $validation->errors()], 400);
         } else {
             if ($request->hasFile('image')) {
-                $image_name = $this->saveImage($request->file('image')); // Gọi phương thức saveImage từ trait SaveFile
+                $image_name = $this->saveImage($request->file('image'), '', 'images/homeBanner'); // Gọi phương thức saveImage từ trait SaveFile
             } elseif ($request->id > 0) {
                 $image_name = HomeBanner::where('id', $request->id)->pluck('image')->first();
             } else {
