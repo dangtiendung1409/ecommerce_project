@@ -65,6 +65,8 @@
             <ul>
                 <li> <a href="{{url('admin/category')}}"><i class="bx bx-right-arrow-alt"></i>Category</a>
                 </li>
+                <li> <a href="{{url('admin/category_attribute')}}"><i class="bx bx-right-arrow-alt"></i>Category Attribute</a>
+                </li>
             </ul>
         </li>
         <li class="menu-label">Forms & Tables</li>

@@ -40,5 +40,9 @@ Route::post('/update_attribute_value',[attributeController::class,'store_attribu
 Route::get('/category',[categoryController::class,'index']);
 Route::post('/updateCategory',[categoryController::class,'store']);
 
+//Category
+Route::get('/category_attribute',[categoryController::class,'index_category_attribute']);
+Route::post('/update_category_attribute',[categoryController::class,'store_category_attribute']);
+
 // delete data
 Route::get('/deleteData/{id?}/{table?}',[dashboardController::class,'deleteData']);
