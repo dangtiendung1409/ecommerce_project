@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Validator;
 use App\Traits\ApiResponse;
-use App\Traits\SaveFile; // Import trait SaveFile
+use App\Traits\SaveFile;
 use Illuminate\Support\Facades\File;
 
 class homeBannerController extends Controller
@@ -32,7 +32,7 @@ class homeBannerController extends Controller
     {
         $validation = Validator::make($request->all(), [
             'text'    => 'required|string|max:255',
-            'image'   => 'mimes:jpeg,png,jpg,gif|max:5120', // max 5 MB
+            'image'   => 'mimes:jpeg,png,jpg,gif,webp|max:5120', // max 5 MB
             'link'    => 'required|string|max:255',
             'id'      => 'required'
         ]);

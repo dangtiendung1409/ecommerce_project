@@ -37,7 +37,7 @@ class profileController extends Controller
             'name'    => 'required|string|max:255',
             'email'   => 'required|string|email|unique:users,email,'.Auth::User()->id,
 //            'password'=> 'required|string|min:6|confirmed',
-             'image'   => 'mimes:jpeg,png,jpg,gif|max:5120',//max 5 MB
+             'image'   => 'mimes:jpeg,png,jpg,gif,webp|max:5120',//max 5 MB
             // 'user_id' => 'required|exists:users,id'
             'address'    => 'required|string|max:255',
             'twitter_link'    => 'string|max:255',
