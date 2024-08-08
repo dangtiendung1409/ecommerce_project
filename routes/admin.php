@@ -3,7 +3,9 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\profileController;
 use App\Http\Controllers\Admin\homeBannerController;
+use App\Http\Controllers\Admin\productController;
 use App\Http\Controllers\Admin\brandController;
+use App\Http\Controllers\Admin\taxController;
 use App\Http\Controllers\Admin\dashboardController;
 use App\Http\Controllers\Admin\sizeController;
 use App\Http\Controllers\Admin\colorController;
@@ -48,6 +50,14 @@ Route::post('/update_category_attribute',[categoryController::class,'store_categ
 // brand
 Route::get('/brand',[brandController::class,'index']);
 Route::post('/updateBrand',[brandController::class,'store']);
+
+// tax
+Route::get('/tax',[taxController::class,'index']);
+Route::post('/updateTax',[taxController::class,'store']);
+
+// product
+Route::get('/product',[productController::class,'index']);
+Route::post('/updateProduct',[productController::class,'store']);
 
 // delete data
 Route::get('/deleteData/{id?}/{table?}',[dashboardController::class,'deleteData']);
