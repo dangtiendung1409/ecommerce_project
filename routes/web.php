@@ -21,6 +21,10 @@ Route::get('/', function () {
     return view('auth/signIn');
 });
 
+Route::get('/apiDocs', function () {
+    return view('apiDocs');
+});
+
 Route::post('/login_user',[authController::class,'loginUser']);
 
 Route::get('/logout', function () {
