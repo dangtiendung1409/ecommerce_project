@@ -20,15 +20,20 @@ class attributeController extends Controller
     }
     public function store_attribute_name(Request $request)
     {
-        $validation = Validator::make($request->all(),[
-            'name'    => 'required|string|max:255',
-            'slug'    => 'required|string|max:255',
+        $validation = Validator::make($request->all(), [
+            'name' => 'required|string|max:255',
+            'slug' => 'required|string|max:255',
         ]);
-        Attribute::updateOrCreate(
-            ['id' =>$request->id],
-            ['name'=>$request->name, 'slug'=>$request->slug]
-        );
-        return $this->success(['reload'=>true],'Successfully updated');
+        if ($validation->fails()) {
+            return response()->json(['status' => 'error', 'message' => $validation->errors()], 400);
+//            return response()->json(['status'=>400,'message'=>$validation->errors()->first()]);
+        } else {
+            Attribute::updateOrCreate(
+                ['id' => $request->id],
+                ['name' => $request->name, 'slug' => $request->slug]
+            );
+            return $this->success(['reload' => true], 'Successfully updated');
+        }
     }
 
 
@@ -42,14 +47,19 @@ class attributeController extends Controller
     }
     public function store_attribute_value(Request $request)
     {
-        $validation = Validator::make($request->all(),[
-            'attributes_id'    => 'required|exists:attributes,id',
-            'value'    => 'required|string|max:255',
+        $validation = Validator::make($request->all(), [
+            'attributes_id' => 'required|exists:attributes,id',
+            'value' => 'required|string|max:255',
         ]);
-        AttributeValue::updateOrCreate(
-            ['id' =>$request->id],
-            ['attributes_id'=>$request->attributes_id, 'value'=>$request->value]
-        );
-        return $this->success(['reload'=>true],'Successfully updated');
+        if ($validation->fails()) {
+            return response()->json(['status' => 'error', 'message' => $validation->errors()], 400);
+//            return response()->json(['status'=>400,'message'=>$validation->errors()->first()]);
+        } else {
+            AttributeValue::updateOrCreate(
+                ['id' => $request->id],
+                ['attributes_id' => $request->attributes_id, 'value' => $request->value]
+            );
+            return $this->success(['reload' => true], 'Successfully updated');
+        }
     }
 }

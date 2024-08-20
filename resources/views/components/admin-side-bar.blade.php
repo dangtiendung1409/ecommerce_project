@@ -90,7 +90,7 @@
                 <div class="menu-title">Products</div>
             </a>
             <ul>
-                <li> <a href="{{url('admin/product')}}"><i class="bx bx-right-arrow-alt"></i>Category</a>
+                <li> <a href="{{url('admin/product')}}"><i class="bx bx-right-arrow-alt"></i>Product</a>
                 </li>
                 <li> <a href="{{url('admin/category_attribute')}}"><i class="bx bx-right-arrow-alt"></i>Category Attribute</a>
                 </li>

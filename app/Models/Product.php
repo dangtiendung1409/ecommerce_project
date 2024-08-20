@@ -19,4 +19,11 @@ class Product extends Model
         'brand_id',
         'tax_id'
     ];
+    public function attribute() {
+        return $this->hasMany(ProductAttribute::class, 'product_id', 'id')->with('attribute_values');
+    }
+
+    public function productAttributes() {
+        return $this->hasMany(ProductAttr::class,'product_id','id')->with('images');
+    }
 }

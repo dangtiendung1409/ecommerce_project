@@ -13,4 +13,8 @@ class Attribute extends Model
         'slug',
 
     ];
+
+    public  function values(){
+        return $this->hasMany(AttributeValue::class,'attributes_id','id');
+    }
 }

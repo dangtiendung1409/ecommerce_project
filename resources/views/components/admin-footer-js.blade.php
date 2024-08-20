@@ -19,6 +19,31 @@
 {{--<script src="{{asset('assets/snackbar/dist/js-snackbar.js')}}"></script>--}}
 <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet"/>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+<script type="text/javascript" src="{{asset('multiSelect/jquery.multi-select.js')}}"></script>
+<script type="text/javascript">
+    $(function(){
+        $('#attribute_id').multiSelect();
+        $('#line-wrap-example').multiSelect({
+            positionMenuWithin: $('.position-menu-within')
+        });
+        $('#categories').multiSelect({
+            noneText: 'All categories',
+            presets: [
+                {
+                    name: 'All categories',
+                    all: true
+                },
+                {
+                    name: 'My categories',
+                    options: ['a', 'c']
+                }
+            ]
+        });
+        $('#modal-example').multiSelect({
+            'modalHTML': '<div class="multi-select-modal">'
+        });
+    });
+</script>
 <script>
     $(document).ready(function() {
         $('#example').DataTable();

@@ -21,4 +21,7 @@ class ProductAttr extends Model
         'color_id',
         'size_id'
     ];
+    public function images() {
+        return $this->hasMany(ProductAttrImages::class,'product_attr_id','id');
+    }
 }
