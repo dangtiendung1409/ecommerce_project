@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Brand;
 use App\Models\HomeBanner;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -40,20 +41,20 @@ class homeBannerController extends Controller
         if ($validation->fails()) {
             return response()->json(['status' => 'error', 'message' => $validation->errors()], 400);
         } else {
-            if ($request->hasFile('image')) {
-                $image_name = $this->saveImage($request->file('image'), '', 'images/homeBanner'); // Gọi phương thức saveImage từ trait SaveFile
-            } elseif ($request->id > 0) {
-                $image_name = HomeBanner::where('id', $request->id)->pluck('image')->first();
+            if($request->id > 0) {
+                $image = HomeBanner::find($request->id);
+                $imageName = $image->image;
+                $imageName = $this->saveImage($request->image, $imageName,'images/homeBanner');
             } else {
-                $image_name = null;
-            }
+                $imageName = $this->saveImage($request->image, '','images/homeBanner');
+            };
 
             HomeBanner::updateOrCreate(
                 ['id' => $request->id],
                 [
                     'text'  => $request->text,
                     'link'  => $request->link,
-                    'image' => $image_name
+                    'image' => $imageName
                 ]
             );
             return $this->success(['reload' => true], 'Successfully updated');

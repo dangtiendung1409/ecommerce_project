@@ -32,15 +32,19 @@ class productController extends Controller
 
     public function view_product($id = 0)
     {
+        $category = Category::get();
+        $brand = Brand::get();
+        $color = Color::get();
+        $tax  = Tax::get();
+        $size = Size::get();
         if ($id == 0) {
             $data = new Product();
-            $product_attr = new ProductAttr();
-            $product_attr_image = new ProductAttrImages();
-            $category = Category::get();
-            $brand = Brand::get();
-            $color = Color::get();
-            $tax  = Tax::get();
-            $size = Size::get();
+//            $data['productAttributes'] = ProductAttr::get();
+
+            $data['productAttributes'] = $this->attrDummyData();
+
+            $product_attr_images = new ProductAttrImages();
+
         } else {
             $data['id'] = $id;
             $validation = Validator::make($data, [
@@ -50,18 +54,27 @@ class productController extends Controller
                 return Redirect::back();
             } else {
                 $data = Product::where('id', $id)->with('attribute','productAttributes')->first();
-                $category = Category::get();
-                $brand = Brand::get();
-                $color = Color::get();
-                $tax  = Tax::get();
-                $size = Size::get();
             }
         }
 
         return view('admin/Product/manage_product', get_defined_vars());
 
     }
+ public function attrDummyData(){
+     $data[0]['id'] = 0 ;
+     $data[0]['color_id'] = 0 ;
+     $data[0]['size_id'] = 0 ;
+     $data[0]['sku'] = 0 ;
+     $data[0]['mrp'] = 0 ;
+     $data[0]['qty'] = 0 ;
+     $data[0]['price'] = 0 ;
+     $data[0]['length'] = 0 ;
+     $data[0]['breadth'] = 0 ;
+     $data[0]['height'] = 0 ;
+     $data[0]['weight'] = 0 ;
+     return $data;
 
+ }
     public function store(Request $request)
     {
         try {
@@ -73,7 +86,7 @@ class productController extends Controller
                 'id' => 'required',
                 'category_id' => 'required|exists:categories,id',
             ]);
-
+            $cleanImageName = $this->clean($request->name);
             if ($validation->fails()) {
                 return response()->json(['status' => 'error', 'message' => $validation->errors()], 400);
             }
@@ -90,7 +103,7 @@ class productController extends Controller
                         }
                     }
                 }
-                $image_name = $request->name . time() . '.' . $request->image->extension();
+                $image_name = $request->name .$cleanImageName. time() . '.' . $request->image->extension();
                 $request->image->move(public_path('images/products/'), $image_name);
             } elseif ($request->id > 0) {
                 $image_name = Product::where('id', $request->post('id'))->pluck('image')->first();
@@ -155,7 +168,7 @@ class productController extends Controller
                             ProductAttrImages::where('product_attr_id', $productAttrId)->delete();
 
                             foreach ($request->$imageVal as $img) {
-                                $image_name = $request->name . time() . '.' . $img->extension();
+                                $image_name = $request->name .$cleanImageName. time() . '.' . $img->extension();
                                 $img->move(public_path('images/productsAttr/'), $image_name);
 
                                 ProductAttrImages::create([
@@ -176,6 +189,12 @@ class productController extends Controller
             return response()->json(['status' => 'error', 'message' => $th->getMessage()], 500);
         }
     }
+    public function clean($string)
+    {
+        $string = str_replace(' ', '-', $string); // Thay thế tất cả khoảng trắng bằng dấu gạch ngang (-).
+        return preg_replace('/[^A-Za-z0-9\-]/', '', $string); // Loại bỏ tất cả các ký tự đặc biệt, chỉ giữ lại chữ cái (A-Z, a-z), số (0-9) và dấu gạch ngang (-).
+    }
+
     public function getAttributes(Request $request){
         $category_id = $request->category_id;
         $data = CategoryAttribute::where('category_id',$category_id)->with('attribute','values')->get();

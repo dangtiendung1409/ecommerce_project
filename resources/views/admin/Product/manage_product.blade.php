@@ -165,11 +165,11 @@
                                               @foreach($data['productAttributes'] as $productAttr)
 
                                                 <div class="row" id="addAttr_{{$count}}">
-                                                    <input type="hidden" name="productAttrId[]" value="({$productAttr->id}}">
+                                                    <input type="hidden" name="productAttrId[]" value="({$productAttr['id]}}">
                                                 <div class="col-sm-3">
                                                     <select name="color_id[]" id="color_id" class="form-control">
                                                         @foreach($color as $colorList)
-                                                            @if($productAttr->color_id == $colorList->id)
+                                                            @if($productAttr['color_id'] == $colorList->id)
                                                             <option selected class="box_color" style="background-color:{{$colorList->value}}"
                                                                     value="{{$colorList->id}}">{{$colorList->text}}
                                                             </option>
@@ -184,7 +184,7 @@
                                                 <div class="col-sm-3">
                                                     <select name="size_id[]" id="size_id" class="form-control">
                                                         @foreach($size as $sizeList)
-                                                            @if($productAttr->size_id == $sizeList->id)
+                                                            @if($productAttr['size_id'] == $sizeList->id)
                                                             <option selected value="{{$sizeList->id}}">{{$sizeList->text}}</option>
                                                             @else
                                                                 <option value="{{$sizeList->id}}">{{$sizeList->text}}</option>
@@ -193,28 +193,28 @@
                                                     </select>
                                                 </div>
                                                 <div class="col-sm-3">
-                                                    <input type="text" name="sku[]" class="form-control" value="{{ $productAttr->sku }}" id="sku"  placeholder="Enter SKU">
+                                                    <input type="text" name="sku[]" class="form-control" value="{{ $productAttr['sku']}}" id="sku"  placeholder="Enter SKU">
                                                 </div>
                                                 <div class="col-sm-3">
-                                                    <input type="text" name="mrp[]" class="form-control" value="{{ $productAttr->mrp }}" id="inputEmailAddress2" placeholder="Enter MRP">
+                                                    <input type="text" name="mrp[]" class="form-control" value="{{ $productAttr['mrp'] }}" id="inputEmailAddress2" placeholder="Enter MRP">
                                                 </div>
                                                 <div class="col-sm-3">
-                                                    <input type="text" name="price[]" class="form-control" value="{{ $productAttr->price }}" id="inputEmailAddress2" placeholder="Enter Price">
+                                                    <input type="text" name="price[]" class="form-control" value="{{ $productAttr['price']}}" id="inputEmailAddress2" placeholder="Enter Price">
                                                 </div>
                                                  <div class="col-sm-3">
-                                                    <input type="text" name="qty[]" class="form-control" value="{{ $productAttr->qty }}" id="inputEmailAddress2" placeholder="Enter Qty">
+                                                    <input type="text" name="qty[]" class="form-control" value="{{ $productAttr['qty']}}" id="inputEmailAddress2" placeholder="Enter Qty">
                                                 </div>
                                                 <div class="col-sm-3">
-                                                    <input type="text" name="length[]" class="form-control" value="{{ $productAttr->length }}" id="inputEmailAddress2" placeholder="Enter Length">
+                                                    <input type="text" name="length[]" class="form-control" value="{{ $productAttr['length']}}" id="inputEmailAddress2" placeholder="Enter Length">
                                                 </div>
                                                 <div class="col-sm-3">
-                                                    <input type="text" name="breadth[]" class="form-control" value="{{ $productAttr->breadth }}" id="inputEmailAddress2" placeholder="Enter breadth">
+                                                    <input type="text" name="breadth[]" class="form-control" value="{{ $productAttr['breadth']}}" id="inputEmailAddress2" placeholder="Enter breadth">
                                                 </div>
                                                 <div class="col-sm-3">
-                                                    <input type="text" name="height[]" class="form-control" value="{{ $productAttr->height }}" id="inputEmailAddress2" placeholder="Enter height">
+                                                    <input type="text" name="height[]" class="form-control" value="{{ $productAttr['height']}}" id="inputEmailAddress2" placeholder="Enter height">
                                                 </div>
                                                 <div class="col-sm-3">
-                                                    <input type="text" name="weight[]" class="form-control" value="{{ $productAttr->weight }}" id="inputEmailAddress2" placeholder="Enter weight">
+                                                    <input type="text" name="weight[]" class="form-control" value="{{ $productAttr['weight']}}" id="inputEmailAddress2" placeholder="Enter weight">
                                                 </div>
                                                        <div class="row mb-3">
                                             <label for="inputChoosePassword2" class="col-sm-3 col-form-label">Product Image</label>
@@ -224,6 +224,7 @@
                                                  <button type="button" id="addAttrImages" onclick="addAttrImages1('attrImage_{{$count}}','{{$count}}')" class="btn btn-info">Add Image</button>
                                                 </div>
                                              <div id="attrImage_{{$count}}">
+                                                 @if(isset($productAttr['images'][0]))
                                                  @foreach($productAttr['images'] as $productAttrImages)
                                                          <div id="attrImage_{{$imageCount}}">
                                                       <div class="col-sm-9">
@@ -238,6 +239,7 @@
                                                 </div>
                                                      <?php $imageCount++;?>
                                                  @endforeach
+                                                 @endif
                                              </div>
 
                                             </div>

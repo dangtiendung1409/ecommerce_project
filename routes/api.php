@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\auth\authController;
+use App\Http\Controllers\front\HomePageController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -37,3 +38,6 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         ];
     });
 });
+// frontend data
+Route::get('/getHomeData', [HomePageController::class, 'getHomeData']);
+Route::get('/getHeaderCategoriesData', [HomePageController::class, 'getCategoriesData']);

@@ -19,7 +19,9 @@ use Illuminate\Support\Facades\Auth;
 
 Route::get('/', function () {
     return view('index');
-//    return view('auth/signIn');
+});
+Route::get('/loginAdmin', function () {
+    return view('auth/signIn');
 });
 
 Route::get('/apiDocs', function () {

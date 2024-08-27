@@ -42,8 +42,8 @@
                         <div class="menu-wrap">
                             <nav class="menu-nav show">
                                 <div class="logo">
-                                    <a href="index.html" class="main-logo"><img src="../assets/img/logo/fw_logo.png" alt="Logo"></a>
-                                    <a href="index.html" class="sticky-logo"><img src="../assets/img/logo/logo.png" alt="Logo"></a>
+                                    <a href="index.html" class="main-logo"><img src="/front_assets/img/logo/fw_logo.png" alt="Logo"></a>
+                                    <a href="index.html" class="sticky-logo"><img src="/front_assets/img/logo/logo.png" alt="Logo"></a>
                                 </div>
                                 <div class="navbar-wrap main-menu d-none d-lg-flex">
                                     <ul class="navigation">
@@ -51,109 +51,37 @@
                                             <ul class="mega--menu--wrap scroll">
                                                 <li>
                                                     <a href="index.html">
-                                                        <span class="img"><img src="../assets/img/home-demo/home_01.jpg" alt=""></span>
+                                                        <span class="img"><img src="/front_assets/img/home-demo/home_01.jpg" alt=""></span>
                                                         <span class="text">Home style One</span>
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <a href="index-2.html">
-                                                        <span class="img"><img src="../assets/img/home-demo/home_02.jpg" alt=""></span>
-                                                        <span class="text">Home style Two</span>
-                                                    </a>
-                                                </li>
-                                                <li class="active">
-                                                    <a href="index-3.html">
-                                                        <span class="img"><img src="../assets/img/home-demo/home_03.jpg" alt=""></span>
-                                                        <span class="text">Home style Three</span>
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <a href="index-4.html">
-                                                        <span class="img"><img src="../assets/img/home-demo/home_04.jpg" alt=""></span>
-                                                        <span class="text">Home style four</span>
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <a href="index-5.html">
-                                                        <span class="img"><img src="../assets/img/home-demo/home_05.jpg" alt=""></span>
-                                                        <span class="text">Home style five</span>
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <a href="index-6.html">
-                                                        <span class="img"><img src="../assets/img/home-demo/home_06.jpg" alt=""></span>
-                                                        <span class="text">Home style six</span>
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <a href="index-7.html">
-                                                        <span class="img"><img src="../assets/img/home-demo/home_07.jpg" alt=""></span>
-                                                        <span class="text">Home style seven</span>
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <a href="index-8.html">
-                                                        <span class="img"><img src="../assets/img/home-demo/home_08.jpg" alt=""></span>
-                                                        <span class="text">Home style eight</span>
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <a href="index-9.html">
-                                                        <span class="img"><img src="../assets/img/home-demo/home_09.jpg" alt=""></span>
-                                                        <span class="text">Home style nine</span>
                                                     </a>
                                                 </li>
                                             </ul>
                                         </li>
-                                        <li class="has--mega--menu"><a href="#">Shop</a>
+                                        <li v-for="item in headerCategories" :key="item.id" class="has--mega--menu">
+                                            <a href="#">{{ item.name }}</a>
                                             <ul class="mega-menu">
                                                 <li class="mega-menu-wrap">
                                                     <ul class="mega-menu-col">
-                                                        <li class="mega-title"><a href="shop.html">SHOP PAGES</a></li>
-                                                        <li><a href="shop-sidebar.html">Right Sidebar</a></li>
-                                                        <li><a href="shop-sidebar.html">Left Sidebar</a></li>
-                                                        <li><a href="shop.html">Hidden sidebar</a></li>
-                                                        <li><a href="shop.html">Filters area</a></li>
-                                                        <li><a href="shop-details.html">Shop Details</a></li>
-                                                        <li><a href="cart.html">Cart Page</a></li>
-                                                        <li><a href="checkout.html">Checkout Page</a></li>
+                                                        <li class="mega-title"><a href="shop.html">{{ item.name }}</a></li>
+                                                        <li v-for="subitem in item.subcategories" :key="subitem.id">
+                                                            <a href="shop-sidebar.html">{{ subitem.name }}</a></li>
+
                                                     </ul>
-                                                    <ul class="mega-menu-col">
-                                                        <li class="mega-title"><a href="#">FEATURES</a></li>
-                                                        <li><a href="shop-sidebar.html">Variable Product</a></li>
-                                                        <li><a href="shop-sidebar.html">External Product</a></li>
-                                                        <li><a href="shop-sidebar.html">Other Shop Pages</a></li>
-                                                        <li><a href="shop-sidebar.html">Categories</a></li>
-                                                        <li><a href="shop-sidebar.html">Collection</a></li>
-                                                        <li><a href="shop-sidebar.html">LookBook</a></li>
-                                                        <li><a href="cart.html">Shopping Cart</a></li>
-                                                    </ul>
+
                                                     <ul class="mega-menu-col sub-cat-post">
                                                         <li>
                                                             <a href="shop-sidebar.html">
-                                                                <img src="../assets/img/product/sub_menu_img01.jpg" alt="">
-                                                                <span class="btn">Man Shop</span>
+                                                                <img :src="`/images/categories/${item.image}`" alt="">
+                                                                <span class="btn">{{ item.name }}</span>
                                                             </a>
                                                         </li>
                                                     </ul>
-                                                    <ul class="mega-menu-col sub-cat-post">
-                                                        <li>
-                                                            <a href="shop-sidebar.html">
-                                                                <img src="../assets/img/product/sub_menu_img02.jpg" alt="">
-                                                                <span class="btn">Women’s Shop</span>
-                                                            </a>
-                                                        </li>
-                                                    </ul>
+
                                                 </li>
                                             </ul>
                                         </li>
                                         <li><a href="about-us.html">About Us</a></li>
-                                        <li class="menu-item-has-children"><a href="#">blog</a>
-                                            <ul class="submenu">
-                                                <li><a href="blog.html">Our Blog</a></li>
-                                                <li><a href="blog-details.html">Blog Details</a></li>
-                                            </ul>
-                                        </li>
+
                                         <li><a href="contact.html">Contact Us</a></li>
                                     </ul>
                                 </div>
@@ -164,7 +92,7 @@
                                             <ul class="minicart">
                                                 <li class="d-flex align-items-start">
                                                     <div class="cart-img">
-                                                        <a href="#"><img src="../assets/img/product/cart_p01.jpg" alt=""></a>
+                                                        <a href="#"><img src="/front_assets/img/product/cart_p01.jpg" alt=""></a>
                                                     </div>
                                                     <div class="cart-content">
                                                         <h4><a href="#">Exclusive Winter Jackets</a></h4>
@@ -179,7 +107,7 @@
                                                 </li>
                                                 <li class="d-flex align-items-start">
                                                     <div class="cart-img">
-                                                        <a href="#"><img src="../assets/img/product/cart_p02.jpg" alt=""></a>
+                                                        <a href="#"><img src="/front_assets/img/product/cart_p02.jpg" alt=""></a>
                                                     </div>
                                                     <div class="cart-content">
                                                         <h4><a href="#">Winter Jackets For Women</a></h4>
@@ -215,7 +143,7 @@
                         <div class="mobile-menu">
                             <div class="close-btn"><i class="flaticon-targeting-cross"></i></div>
                             <nav class="menu-box">
-                                <div class="nav-logo"><a href="index.html"><img src="../assets/img/logo/logo.png" alt="" title=""></a>
+                                <div class="nav-logo"><a href="index.html"><img src="/front_assets/img/logo/logo.png" alt="" title=""></a>
                                 </div>
                                 <div class="menu-outer">
                                     <ul class="navigation">
@@ -232,7 +160,8 @@
                                                 <li><a href="index-9.html">Home Nine</a></li>
                                             </ul>
                                         </li>
-                                        <li class="menu-item-has-children"><a href="#">Shop</a>
+                                        <li class="menu-item-has-children">
+                                            <a href="#">Shop</a>
                                             <ul class="submenu">
                                                 <li><a href="shop.html">Shop Page</a></li>
                                                 <li><a href="shop-sidebar.html">Shop Sidebar</a></li>
@@ -283,7 +212,7 @@
         <!-- Modal Search-end -->
 
         <!-- off-canvas-start -->
-        <div class="sidebar-toggle-btn"><a href="#" class="navSidebar-button"><img src="../assets/img/icon/sidebar_toggle_icon.png" alt=""></a></div>
+        <div class="sidebar-toggle-btn"><a href="#" class="navSidebar-button"><img src="/front_assets/img/icon/sidebar_toggle_icon.png" alt=""></a></div>
         <div class="sidebar-off-canvas info-group">
             <div class="off-canvas-overlay"></div>
             <div class="off-canvas-widget scroll">
@@ -297,7 +226,7 @@
                         <div class="sidebar-info-contents">
                             <div class="content-inner">
                                 <div class="logo mb-30">
-                                    <a href="index.html"><img src="../assets/img/logo/logo.png" alt=""></a>
+                                    <a href="index.html"><img src="/front_assets/img/logo/logo.png" alt=""></a>
                                 </div>
                                 <div class="content-box">
                                     <p>WooCommerce and WordPress are both free, open source software reasons many ...</p>
@@ -378,7 +307,7 @@
                 <div class="row">
                     <div class="col-12">3
                         <div class="footer-logo">
-                            <a href="index.html"><img src="../assets/img/logo/w_logo.png" alt=""></a>
+                            <a href="index.html"><img src="/front_assets/img/logo/w_logo.png" alt=""></a>
                         </div>
                     </div>
                 </div>
@@ -421,7 +350,7 @@
                     </div>
                     <div class="col-lg-6">
                         <div class="pay-method-img">
-                            <img src="../assets/img/images/payment_method_img.png" alt="">
+                            <img src="/front_assets/img/images/payment_method_img.png" alt="">
                         </div>
                     </div>
                 </div>
@@ -429,10 +358,52 @@
         </div>
     </footer>
     <!-- footer-area-end -->
-
+<div id="scripts"></div>
 </template>
 <script>
+import axios from 'axios';
+import getUrlList from "../provider.js";
  export default {
-     name:'Layout'
+     name:'Layout',
+     data(){
+         return{
+             headerCategories:[],
+         }
+     },
+     mounted(){
+         var src = ['/front_assets/js/vendor/jquery-3.5.0.min.js','/front_assets/js/popper.min.js',
+             '/front_assets/js/bootstrap.min.js', '/front_assets/js/isotope.pkgd.min.js',
+             '/front_assets/js/imagesloaded.pkgd.min.js', '/front_assets/js/jquery.magnific-popup.min.js',
+             'js/jquery.mCustomScrollbar.concat.min.js', '/front_assets/js/bootstrap-datepicker.min.js',
+             '/front_assets/js/jquery.nice-select.min.js', '/front_assets/js/jquery.countdown.min.js',
+             '/front_assets/js/swiper-bundle.min.js','/front_assets/js/jarallax.min.js',
+             '/front_assets/js/slick.min.js', '/front_assets/js/wow.min.js',
+             '/front_assets/js/nav-tool.js', '/front_assets/js/plugins.js','/front_assets/js/main.js',
+         ];
+         for (var i=0; i<src.length;i++){
+             const script = document.createElement('script');
+             script.src = src[i];
+             script.async =false;
+             document.getElementById('scripts').appendChild(script);
+         }
+         this.getCategories();
+     },
+     methods:{
+         async getCategories(){
+             try {
+                 let data = await axios.get(getUrlList().getHeaderCategoriesData);
+                 // console.log(data.data.data.data.categories);
+                 if(data.status == 200 && data.data.data.data.categories.length > 0 ) {
+                     this.headerCategories = data.data.data.data.categories;
+                     console.log(this.headerCategories);
+                 }else{
+                     console.log('data not found');
+                     // console.log(data);
+                 }
+             } catch (error) {
+                  console.log('error');
+             }
+         }
+     }
  }
 </script>
