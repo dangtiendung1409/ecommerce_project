@@ -374,7 +374,7 @@ import getUrlList from "../provider.js";
          var src = ['/front_assets/js/vendor/jquery-3.5.0.min.js','/front_assets/js/popper.min.js',
              '/front_assets/js/bootstrap.min.js', '/front_assets/js/isotope.pkgd.min.js',
              '/front_assets/js/imagesloaded.pkgd.min.js', '/front_assets/js/jquery.magnific-popup.min.js',
-             'js/jquery.mCustomScrollbar.concat.min.js', '/front_assets/js/bootstrap-datepicker.min.js',
+             '/front_assets/js/jquery.mCustomScrollbar.concat.min.js', '/front_assets/js/bootstrap-datepicker.min.js',
              '/front_assets/js/jquery.nice-select.min.js', '/front_assets/js/jquery.countdown.min.js',
              '/front_assets/js/swiper-bundle.min.js','/front_assets/js/jarallax.min.js',
              '/front_assets/js/slick.min.js', '/front_assets/js/wow.min.js',
@@ -395,7 +395,7 @@ import getUrlList from "../provider.js";
                  // console.log(data.data.data.data.categories);
                  if(data.status == 200 && data.data.data.data.categories.length > 0 ) {
                      this.headerCategories = data.data.data.data.categories;
-                     console.log(this.headerCategories);
+                     // console.log(this.headerCategories);
                  }else{
                      console.log('data not found');
                      // console.log(data);

@@ -8,10 +8,10 @@
   "host": "127.0.0.1:8000",
   "basePath": "/api",
   "tags": [
-    {
-      "name": "User",
-      "description": "All User Operations"
-    },
+      {
+         "name": "User",
+         "description": "All User Operations"
+      },
       {
           "name": "Home Page Data",
           "description": "All Home Page Data"
