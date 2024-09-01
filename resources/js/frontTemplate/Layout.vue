@@ -1,28 +1,28 @@
 <template>
     <!-- preloader  -->
-    <div id="preloader">
-        <div id="ctn-preloader" class="ctn-preloader">
-            <div class="animation-preloader">
-                <div class="spinner"></div>
-            </div>
-            <div class="loader">
-                <div class="row">
-                    <div class="col-3 loader-section section-left">
-                        <div class="bg"></div>
-                    </div>
-                    <div class="col-3 loader-section section-left">
-                        <div class="bg"></div>
-                    </div>
-                    <div class="col-3 loader-section section-right">
-                        <div class="bg"></div>
-                    </div>
-                    <div class="col-3 loader-section section-right">
-                        <div class="bg"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+<!--    <div id="preloader">-->
+<!--        <div id="ctn-preloader" class="ctn-preloader">-->
+<!--            <div class="animation-preloader">-->
+<!--                <div class="spinner"></div>-->
+<!--            </div>-->
+<!--            <div class="loader">-->
+<!--                <div class="row">-->
+<!--                    <div class="col-3 loader-section section-left">-->
+<!--                        <div class="bg"></div>-->
+<!--                    </div>-->
+<!--                    <div class="col-3 loader-section section-left">-->
+<!--                        <div class="bg"></div>-->
+<!--                    </div>-->
+<!--                    <div class="col-3 loader-section section-right">-->
+<!--                        <div class="bg"></div>-->
+<!--                    </div>-->
+<!--                    <div class="col-3 loader-section section-right">-->
+<!--                        <div class="bg"></div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
     <!-- preloader end -->
 
 
@@ -58,14 +58,14 @@
                                             </ul>
                                         </li>
                                         <li v-for="item in headerCategories" :key="item.id" class="has--mega--menu">
-                                            <a href="#">{{ item.name }}</a>
+                                            <router-link :to="'/category/'+item.slug">{{ item.name }}</router-link>
                                             <ul class="mega-menu">
                                                 <li class="mega-menu-wrap">
                                                     <ul class="mega-menu-col">
                                                         <li class="mega-title"><a href="shop.html">{{ item.name }}</a></li>
                                                         <li v-for="subitem in item.subcategories" :key="subitem.id">
-                                                            <a href="shop-sidebar.html">{{ subitem.name }}</a></li>
-
+                                                            <router-link :to="'/category/'+subitem.slug">{{ subitem.name }}</router-link>
+                                                        </li>
                                                     </ul>
 
                                                     <ul class="mega-menu-col sub-cat-post">

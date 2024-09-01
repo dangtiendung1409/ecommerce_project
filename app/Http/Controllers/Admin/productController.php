@@ -90,7 +90,7 @@ class productController extends Controller
             if ($validation->fails()) {
                 return response()->json(['status' => 'error', 'message' => $validation->errors()], 400);
             }
-
+            $slug = replaceStr($request->slug);
             // Xử lý upload ảnh
             $image_name = null;
             if ($request->hasFile('image')) {
@@ -114,7 +114,7 @@ class productController extends Controller
                 ['id' => $request->id],
                 [
                     'name' => $request->name,
-                    'slug' => $request->slug,
+                    'slug' => $slug,
                     'image' => $image_name,
                     'category_id' => $request->category_id,
                     'brand_id' => $request->brand_id,
@@ -183,7 +183,7 @@ class productController extends Controller
             }
 
             DB::commit();
-            return $this->success(['reload' => true], 'Successfully updated');
+            return redirect('admin/product')->with('success', 'Product saved successfully.');
         } catch (\Throwable $th) {
             DB::rollBack();
             return response()->json(['status' => 'error', 'message' => $th->getMessage()], 500);

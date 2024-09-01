@@ -15,6 +15,14 @@
       {
           "name": "Home Page Data",
           "description": "All Home Page Data"
+      },
+      {
+          "name": "Category Page Data",
+          "description": "All Category Data"
+      },
+      {
+          "name": "Product Page Data",
+          "description": "All Product Data"
       }
   ],
   "paths": {
@@ -238,6 +246,62 @@
               ],
               "summary": "Categories Data",
               "operationId": "getHeaderCategoriesData",
+              "produces": [
+                  "application/json"
+              ],
+              "security": [
+                  {
+                      "APIKeyHeader": []
+                  }
+              ],
+              "parameters": [
+
+              ],
+              "responses": {
+                  "200": {
+                      "description": "Data"
+                  }
+              }
+          }
+      },
+      "/getCategoryData/{slug}": {
+          "get": {
+              "tags": [
+                  "Category Page Data"
+              ],
+              "summary": "Category Page Data",
+              "operationId": "getCategoryData",
+              "produces": [
+                  "application/json"
+              ],
+              "security": [
+                  {
+                      "APIKeyHeader": []
+                  }
+              ],
+              "parameters": [
+                  {
+                      "name": "slug",
+                      "in": "path",
+                      "description": "Enter slug",
+                      "required": true,
+                      "type": "string"
+                  }
+              ],
+              "responses": {
+                  "200": {
+                      "description": "Data"
+                  }
+              }
+          }
+      },
+      "/getProductData": {
+          "get": {
+              "tags": [
+                  "Product Page Data"
+              ],
+              "summary": "Product Page Data",
+              "operationId": "getProductData",
               "produces": [
                   "application/json"
               ],

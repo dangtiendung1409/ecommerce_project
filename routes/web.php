@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 //use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\auth\authController;
+use App\Http\Controllers\Front\HomePageController;
 use Illuminate\Support\Facades\Auth;
 
 /*
@@ -20,6 +21,7 @@ use Illuminate\Support\Facades\Auth;
 Route::get('/', function () {
     return view('index');
 });
+
 Route::get('/loginAdmin', function () {
     return view('auth/signIn');
 });
@@ -30,8 +32,13 @@ Route::get('/apiDocs', function () {
 
 Route::post('/login_user',[authController::class,'loginUser']);
 
+
 Route::get('/logout', function () {
     Auth::logout();
     return redirect('login');
 });
+Route::get('/{vue_capture?}', function() {
+    return view('index');
+})->where('vue_capture', '[\/\w\.-]*');
 //Route::get('/createAdmin',[AuthController::class, 'createCustomer']);
+//Route::get('/changeSlug',[HomePageController::class,'changeSlug']);

@@ -5,3 +5,8 @@ function prx($arr)
     print_r($arr);
     die();
 }
+function replaceStr($str)
+{
+    return preg_replace('/\s+/', '_', $str);
+}
+

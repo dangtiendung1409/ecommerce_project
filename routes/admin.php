@@ -64,3 +64,4 @@ Route::post('/removeAttrId',[productController::class,'removeAttrId']);
 
 // delete data
 Route::get('/deleteData/{id?}/{table?}',[dashboardController::class,'deleteData']);
+

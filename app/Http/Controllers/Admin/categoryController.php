@@ -35,7 +35,7 @@ class categoryController extends Controller
             return response()->json(['status' => 'error', 'message' => $validation->errors()], 400);
 //            return response()->json(['status'=>400,'message'=>$validation->errors()->first()]);
         } else {
-
+            $slug = replaceStr($request->slug);
             $image_name = null;
             if ($request->hasFile('image')) {
                 $image_name = $this->saveImage($request->file('image'), '', 'images/categories'); // Truyền đường dẫn lưu tệp
@@ -47,7 +47,7 @@ class categoryController extends Controller
                 Category::updateOrCreate(
                     ['id' => $request->id],
                     ['name' => $request->name,
-                        'slug' => $request->slug,
+                        'slug' => $slug,
                         'image' => $image_name,
                         'parent_category_id' => $request->parent_category_id
                     ]
@@ -56,7 +56,7 @@ class categoryController extends Controller
                 Category::updateOrCreate(
                     ['id' => $request->id],
                     ['name' => $request->name,
-                        'slug' => $request->slug,
+                        'slug' => $slug,
                         'image' => $image_name,
                     ]
                 );
