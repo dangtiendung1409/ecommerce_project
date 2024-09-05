@@ -4,7 +4,7 @@
             <main>
 
                 <!-- breadcrumb-area -->
-                <section class="breadcrumb-area breadcrumb-bg" data-background="img/bg/breadcrumb_bg01.jpg">
+                <section class="breadcrumb-area breadcrumb-bg" data-background="/front_assets/img/bg/breadcrumb_bg01.jpg">
                     <div class="container">
                         <div class="row">
                             <div class="col-12">
@@ -65,9 +65,13 @@
                                                     </ul>
                                                 </div>
                                             </div>
-                                            <div class="content">
+                                            <div v-if="item.product_attributes && item.product_attributes.length > 0" class="content">
                                                 <h5><a href="shop-details.html">{{ item.name }}</a></h5>
-                                                <span class="price">$37.00</span>
+                                                <span class="price">${{ item.product_attributes[0].price }}</span>
+                                            </div>
+                                            <div v-else class="content">
+                                                <h5><a href="shop-details.html">{{ item.name }}</a></h5>
+                                                <span class="price">Price not available</span>
                                             </div>
                                         </div>
                                     </div>
@@ -98,13 +102,9 @@
                                         <h4 class="widget-title">Product Categories</h4>
                                         <div class="shop-cat-list">
                                             <ul>
-                                                <li><a href="#">Accessories</a><span>(6)</span></li>
-                                                <li><a href="#">Computer</a><span>(4)</span></li>
-                                                <li><a href="#">Covid-19</a><span>(2)</span></li>
-                                                <li><a href="#">Electronics</a><span>(6)</span></li>
-                                                <li><a href="#">Frame Sunglasses</a><span>(12)</span></li>
-                                                <li><a href="#">Furniture</a><span>(7)</span></li>
-                                                <li><a href="#">Genuine Leather</a><span>(9)</span></li>
+                                                <li v-for="item in categories" :key="item.id">
+                                                    <router-link :to="'/category/'+item.slug">{{ item.name }}</router-link><span>(6)</span></li>
+
                                             </ul>
                                         </div>
                                     </div>
@@ -114,18 +114,30 @@
                                             <div id="slider-range"></div>
                                             <div class="price_slider_amount">
                                                 <span>Price :</span>
-                                                <input type="text" id="amount" name="price" placeholder="Add Your Price" />
+                                                <input type="text" id="lowPrice" @keypress="isNumber($event)" ref="lowPrice" v-model="lowPrice" placeholder="Add Your Price" />
+                                                <input type="text" id="highPrice" @keypress="isNumber($event)" ref="highPrice" v-model="highPrice"  placeholder="Add Your Price" />
                                             </div>
+                                        </div>
+                                    </div>
+                                    <div v-for="item in attributes" :key="item.id" class="widget">
+                                        <h4 class="widget-title">{{ item.attribute.name }}</h4>
+                                        <div class="sidebar-brand-list">
+                                            <ul>
+                                                <li v-for="attrItem in item.attribute.values" :key="attrItem.id" v-on:click="addDataAttr('attribute',attrItem.id)">
+                                                    <a :class="this.attribute.includes(attrItem.id) ?brandColor : ''" href="javascript:void(0)">{{ attrItem.value }}
+                                                        <i class="fas fa-angle-double-right"></i></a></li>
+
+                                            </ul>
                                         </div>
                                     </div>
                                     <div class="widget">
                                         <h4 class="widget-title">Product Brand</h4>
                                         <div class="sidebar-brand-list">
                                             <ul>
-                                                <li><a href="#">New Arrivals <i class="fas fa-angle-double-right"></i></a></li>
-                                                <li><a href="#">Clothing & Accessories <i class="fas fa-angle-double-right"></i></a></li>
-                                                <li><a href="#">Winter Jacket <i class="fas fa-angle-double-right"></i></a></li>
-                                                <li><a href="#">Baby Clothing <i class="fas fa-angle-double-right"></i></a></li>
+                                                <li v-for="item in brands" :key="item.id" v-on:click="addDataAttr('brand',item.id)">
+                                                    <a :class="this.brand.includes(item.id) ?brandColor : ''" href="javascript:void(0)">{{ item.text }}
+                                                        <i class="fas fa-angle-double-right"></i></a></li>
+
                                             </ul>
                                         </div>
                                     </div>
@@ -134,11 +146,11 @@
                                             <h4 class="widget-title">Product Size</h4>
                                             <div class="shop-size-list">
                                                 <ul>
-                                                    <li><a href="#">S</a></li>
-                                                    <li><a href="#">M</a></li>
-                                                    <li><a href="#">L</a></li>
-                                                    <li><a href="#">XL</a></li>
-                                                    <li><a href="#">XXL</a></li>
+                                                    <li v-for="item in sizes" :key="item.id" v-on:click="addDataAttr('size',item.id)">
+                                                        <a :class="this.size.includes(item.id) ?sizeColor : ''" href="javascript:void(0)">
+                                                        {{item.text}}
+                                                        </a>
+                                                    </li>
                                                 </ul>
                                             </div>
                                         </div>
@@ -146,12 +158,17 @@
                                             <h4 class="widget-title">Color</h4>
                                             <div class="shop-color-list">
                                                 <ul>
-                                                    <li></li>
-                                                    <li></li>
-                                                    <li></li>
-                                                    <li></li>
+                                                    <li v-for="item in colors" :key="item.id" v-on:click="addDataAttr('color',item.id)"
+                                                        :class="this.color.includes(item.id) ?colorColor : ''" :style="{backgroundColor: item.value}"></li>
+
                                                 </ul>
                                             </div>
+                                        </div>
+                                        <div class="cart-coupon">
+                                            <form action="#">
+                                                <input type="text">
+                                                <button class="btn">Filter</button>
+                                            </form>
                                         </div>
                                     </div>
                                     <div class="widget">
@@ -213,6 +230,7 @@
                             </div>
                         </div>
                     </div>
+
                 </section>
                 <!-- shop-area-end -->
 
@@ -220,6 +238,7 @@
         </template>
     </Layout>
 </template>
+
 <script>
 import Layout from './Layout.vue'
 import axios from 'axios';
@@ -237,10 +256,25 @@ export default {
             brands:[],
             sizes:[],
             colors:[],
+            attributes:[],
             category:'',
             highPrice:'',
             lowPrice:'',
-            slug:''
+            slug:'',
+            priceRange:'',
+            brand:[],
+            size:[],
+            color:[],
+            attribute:[],
+            brandColor: 'brandColor',
+            sizeColor: 'sizeColor',
+            colorColor: 'colorColor'
+        }
+    },
+    watch:{
+        '$route'()
+        {
+            this.getProducts();
         }
     },
     mounted() {
@@ -248,10 +282,68 @@ export default {
         this.getProducts();
     },
     methods:{
+        isNumber(evt){
+            const charcode = evt.which ? evt.which :evt.keyCode;
+            if(charcode > 31 &&(charcode < 48 || charcode > 57) && charcode !== 46)
+            {
+                evt.preventDefault();
+            }
+        },
+        addDataAttr(type,value)
+        {
+          if(type == 'brand'){
+
+              if(this.checkArray(type,value)){
+                  // true value exist in array
+                  this.brand.splice(this.brand.indexOf(value),1)
+              }else{
+                // false value not exist in array
+                  this.brand.push(value)
+              }
+              console.log(this.brand);
+          }else if(type == 'size'){
+              if(this.checkArray(type,value)){
+                  // true value exist in array
+                  this.size.splice(this.size.indexOf(value),1)
+              }else{
+                  // false value not exist in array
+                  this.size.push(value)
+              }
+
+          }else if(type == 'color'){
+              if(this.checkArray(type,value)){
+                  // true value exist in array
+                  this.color.splice(this.color.indexOf(value),1)
+              }else{
+                  // false value not exist in array
+                  this.color.push(value)
+              }
+          }else if(type == 'attribute'){
+              if(this.checkArray(type,value)){
+                  // true value exist in array
+                  this.attribute.splice(this.attribute.indexOf(value),1)
+              }else{
+                  // false value not exist in array
+                  this.attribute.push(value)
+              }
+          }
+        },
+        checkArray(type,value)
+        {
+            if(type == 'brand'){
+                return this.brand.includes(value);
+            }else if (type == 'size'){
+                return this.size.includes(value);
+            }else if (type == 'color'){
+                return this.color.includes(value);
+            }else if (type == 'attribute'){
+                return this.attribute.includes(value);
+            }
+        },
         async getProducts() {
             try {
                 const route = useRoute();
-                this.slug = route.params.slug;
+                this.slug = this.$route.params.slug;
                 console.log(this.slug);
                 if(this.slug == '' || this.slug == undefined || this.slug == null) {
                     this.$router.push({name:'Index'});
@@ -265,6 +357,9 @@ export default {
                         this.brands = data.data.data.data.brands;
                         this.sizes = data.data.data.data.sizes;
                         this.colors = data.data.data.data.colors;
+                        this.attributes = data.data.data.data.attributes;
+                        this.highPrice = data.data.data.data.highPrice;
+                        this.lowPrice = data.data.data.data.lowPrice;
                         // console.log(this.headerCategories);
                     } else {
                         console.log('data not found');
@@ -280,3 +375,19 @@ export default {
 
 }
 </script>
+<style>
+.brandColor::before {
+    background-color: #ff5400;
+}
+.sizeColor {
+    background-color: #ff5400;
+    color: #FFFF;
+}
+.colorColor::before {
+    content: '\2713';
+    display: inline-block;
+    color: #fff;
+    padding: 0 6px 0 0;
+}
+</style>
+
