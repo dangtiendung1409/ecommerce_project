@@ -114,8 +114,8 @@
                                             <div id="slider-range"></div>
                                             <div class="price_slider_amount">
                                                 <span>Price :</span>
-                                                <input type="text" id="lowPrice" @keypress="isNumber($event)" ref="lowPrice" v-model="lowPrice" placeholder="Add Your Price" />
-                                                <input type="text" id="highPrice" @keypress="isNumber($event)" ref="highPrice" v-model="highPrice"  placeholder="Add Your Price" />
+                                                <input type="text" id="lowPrice" @keypress="isNumber($event)" ref="lowPrice"  placeholder="Add Your Price" />
+                                                <input type="text" id="highPrice" @keypress="isNumber($event)" ref="highPrice"   placeholder="Add Your Price" />
                                             </div>
                                         </div>
                                     </div>
@@ -167,7 +167,7 @@
                                         <div class="cart-coupon">
                                             <form action="#">
                                                 <input type="text">
-                                                <button class="btn">Filter</button>
+                                                <button type="button" v-on:click="getProducts" class="btn">Filter</button>
                                             </form>
                                         </div>
                                     </div>
@@ -282,11 +282,15 @@ export default {
         this.getProducts();
     },
     methods:{
-        isNumber(evt){
-            const charcode = evt.which ? evt.which :evt.keyCode;
-            if(charcode > 31 &&(charcode < 48 || charcode > 57) && charcode !== 46)
-            {
-                evt.preventDefault();
+        // showDataAttribute(){
+        //     this.getProducts();
+        // },
+        isNumber(evt) {
+            const charcode = evt.which ? evt.which : evt.keyCode;  // Lấy mã phím vừa nhấn.
+
+            // Kiểm tra xem mã phím có phải là số từ 0-9 hoặc dấu chấm thập phân không.
+            if (charcode > 31 && (charcode < 48 || charcode > 57) && charcode !== 46) {
+                evt.preventDefault();  // Ngăn chặn việc nhập nếu không phải là số hoặc dấu chấm.
             }
         },
         addDataAttr(type,value)
@@ -348,7 +352,15 @@ export default {
                 if(this.slug == '' || this.slug == undefined || this.slug == null) {
                     this.$router.push({name:'Index'});
                 }else{
-                    let data = await axios.get(getUrlList().getCategoryData+'/'+this.slug);
+                    let data = await axios.post(getUrlList().getCategoryData,{
+                        "slug":this.slug,
+                        "attribute":this.attribute,
+                        "lowPrice":this.$refs.lowPrice.value,
+                        "highPrice":this.$refs.highPrice.value,
+                        "brand":this.brand,
+                        "size":this.size,
+                        "color":this.color,
+                    });
                     // console.log(data)
                     console.log(data.data.data.data.products.data);
                     if (data.status == 200 && data.data.data.data.products.data.length > 0) {
@@ -358,8 +370,8 @@ export default {
                         this.sizes = data.data.data.data.sizes;
                         this.colors = data.data.data.data.colors;
                         this.attributes = data.data.data.data.attributes;
-                        this.highPrice = data.data.data.data.highPrice;
-                        this.lowPrice = data.data.data.data.lowPrice;
+                        this.$refs.lowPrice.value = data.data.data.data.lowPrice;
+                        this.$refs.highPrice.value = data.data.data.data.highPrice;
                         // console.log(this.headerCategories);
                     } else {
                         console.log('data not found');
