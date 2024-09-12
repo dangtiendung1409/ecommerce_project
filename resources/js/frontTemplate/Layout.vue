@@ -368,6 +368,13 @@ import getUrlList from "../provider.js";
      data(){
          return{
              headerCategories:[],
+             user_info:{
+                 'user_id':'',
+                 'auth':false
+             },
+             cartCount:0,
+             cartProduct:[],
+             cartTotal:0
          }
      },
      mounted(){
@@ -387,8 +394,63 @@ import getUrlList from "../provider.js";
              document.getElementById('scripts').appendChild(script);
          }
          this.getCategories();
+         this.getUser();
+         this.getCartData();
      },
      methods:{
+         async getCartData(){
+             try {
+                 let data = await axios.post(getUrlList().getCartData, {
+                     'token': this.user_info.user_id,
+                     'auth': this.user_info.auth,
+                 });
+                 if (data.status === 200) {
+
+                 } else {
+                     console.log('Data not found');
+                 }
+             } catch (error) {
+                 console.log('Error in getUserData:', error);
+             }
+         },
+         async getUser(){
+             if(localStorage.getItem('user_info')) {
+                 // user set into local storage
+                 var user = localStorage.getItem('user_info');
+                 var testUser = JSON.parse(user);
+                 this.user_info.user_id = testUser.user_id;
+                 await this.getUserData();
+             }else{
+                 // user not set to local storage
+                 console.log('No user info in localStorage');
+                 await this.getUserData();
+             }
+         },
+         async getUserData() {
+             try {
+                 let data = await axios.post(getUrlList().getUserData, {
+                     'token': this.user_info.user_id,
+                 });
+                 if (data.status === 200) {
+                     if (data.data.data.data.user_type == 1){
+                     // Auth USer
+                     this.user_info.auth = true;
+                     this.user_info.user_id = data.data.data.data.token;
+                     localStorage.setItem('user_info', JSON.stringify(this.user_info));
+                 }else{
+                         // not auth user
+                         this.user_info.auth = false;
+                         this.user_info.user_id = data.data.data.data.token;
+                         localStorage.setItem('user_info', JSON.stringify(this.user_info));
+                     }
+                 } else {
+                     console.log('Data not found');
+                 }
+             } catch (error) {
+                 console.log('Error in getUserData:', error);
+             }
+         },
+
          async getCategories(){
              try {
                  let data = await axios.get(getUrlList().getHeaderCategoriesData);

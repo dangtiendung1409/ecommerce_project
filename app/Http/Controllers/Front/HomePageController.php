@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Front;
 
 use App\Http\Controllers\Controller;
 use App\Models\Brand;
+use App\Models\Cart;
 use App\Models\Category;
 use App\Models\CategoryAttribute;
 use App\Models\Color;
@@ -11,8 +12,10 @@ use App\Models\HomeBanner;
 use App\Models\Product;
 use App\Models\ProductAttr;
 use App\Models\Size;
+use App\Models\TempUsers;
 use Illuminate\Http\Request;
 use App\Traits\ApiResponse;
+use Validator;
 
 class HomePageController extends Controller
 {
@@ -104,6 +107,50 @@ class HomePageController extends Controller
         }
         $products = $products->with('productAttributes')->select('id','name','slug','image','item_code')->paginate(10);
         return $products;
+    }
+    function getUserData(Request $request){
+//        prx($request->all());
+        $token = $request->token;
+        $checkUser = TempUsers::where('token',$token)->first();
+
+        if(isset($checkUser->id)){
+            // token exist in db
+            $data['user_type'] = $checkUser->user_type;
+            $data['token'] = $checkUser->token;
+            if(checkTokenExpiryInMinutes($checkUser->updated_at,60)){
+              // token has expire
+               $token = generateRandomString();
+               $checkUser->token = $token;
+               $checkUser->updated_at = date('y-m-d h:i:s a',time());
+               $checkUser->save();
+
+               $data['token'] = $token;
+            }else{
+               //token not expire
+            }
+        }else{
+            // token not exist in db
+            $user_id = rand(11111,99999);
+            $token = generateRandomString();
+            $time = date('y-m-d h:i:s a',time());
+            TempUsers::create(['user_id'=>$user_id, 'token'=>$token,'created_at'=>$time,'updated_at'=>$time]);
+            $data['user_type'] = 2;
+            $data['token'] = $token;
+        }
+        return $this->success(['data' => $data], 'Successfully data fetched');
+    }
+    public function getCartData(Request $request){
+        $validation = Validator::make($request->all(), [
+            'token' => 'required|exists:temp_users,token',
+
+        ]);
+        if ($validation->fails()) {
+            return response()->json(['status' => 'error', 'message' => $validation->errors()], 400);
+        }else{
+            $userToken = TempUsers::where('token',$request->token)->first();
+            $data = Cart::where('user_id',$userToken->user_id)->with('products')->get();
+            return $this->success(['data' => $data], 'Successfully data fetched');
+        }
     }
 
 //    public function changeSlug(){
