@@ -88,42 +88,27 @@
                                 <div class="header-action d-none d-md-block">
                                     <ul>
                                         <li class="header-search"><a href="#" data-toggle="modal" data-target="#search-modal"><i class="flaticon-search"></i></a></li>
-                                        <li class="header-shop-cart"><a href="#"><i class="flaticon-shopping-bag"></i><span>0</span></a>
+                                        <li class="header-shop-cart"><a href="#"><i class="flaticon-shopping-bag"></i><span>{{cartCount}}</span></a>
                                             <ul class="minicart">
-                                                <li class="d-flex align-items-start">
+                                                <li v-if="cartCount > 0" v-for="item in cartProduct" :key="item.id" class="d-flex align-items-start">
                                                     <div class="cart-img">
-                                                        <a href="#"><img src="/front_assets/img/product/cart_p01.jpg" alt=""></a>
+                                                        <a href="#"><img :src="`/images/products/${item.products[0].image}`" alt=""></a>
                                                     </div>
                                                     <div class="cart-content">
-                                                        <h4><a href="#">Exclusive Winter Jackets</a></h4>
+                                                        <h4><a href="#">{{item.products[0].name}}</a></h4>
                                                         <div class="cart-price">
-                                                            <span class="new">$229.9</span>
-                                                            <span><del>$229.9</del></span>
+                                                            <span class="new">${{item.products[0].product_attributes[0].price}}</span>
+                                                            <span><del>${{item.products[0].product_attributes[0].mrp}}</del></span>
                                                         </div>
                                                     </div>
                                                     <div class="del-icon">
-                                                        <a href="#"><i class="far fa-trash-alt"></i></a>
-                                                    </div>
-                                                </li>
-                                                <li class="d-flex align-items-start">
-                                                    <div class="cart-img">
-                                                        <a href="#"><img src="/front_assets/img/product/cart_p02.jpg" alt=""></a>
-                                                    </div>
-                                                    <div class="cart-content">
-                                                        <h4><a href="#">Winter Jackets For Women</a></h4>
-                                                        <div class="cart-price">
-                                                            <span class="new">$229.9</span>
-                                                            <span><del>$229.9</del></span>
-                                                        </div>
-                                                    </div>
-                                                    <div class="del-icon">
-                                                        <a href="#"><i class="far fa-trash-alt"></i></a>
+                                                        <a href="javascript:void(0)" @click="removeCartData(item.products[0].id,item.products[0].product_attributes[0].id,1)"><i class="far fa-trash-alt"></i></a>
                                                     </div>
                                                 </li>
                                                 <li>
                                                     <div class="total-price">
                                                         <span class="f-left">Total:</span>
-                                                        <span class="f-right">$239.9</span>
+                                                        <span class="f-right">${{cartTotal}}</span>
                                                     </div>
                                                 </li>
                                                 <li>
@@ -294,7 +279,7 @@
     </header>
     <!-- main-area -->
     <main>
-        <slot name="content">
+        <slot name="content" :addToCart="addToCart">
 
         </slot>
     </main>
@@ -377,6 +362,15 @@ import getUrlList from "../provider.js";
              cartTotal:0
          }
      },
+     watch: {
+         cartProduct(val) {
+             this.cartTotal = 0;
+             for (var item in val) {
+                 this.cartTotal += val[item].qty * val[item].products[0].product_attributes[0].price;
+             }
+         }
+     },
+
      mounted(){
          var src = ['/front_assets/js/vendor/jquery-3.5.0.min.js','/front_assets/js/popper.min.js',
              '/front_assets/js/bootstrap.min.js', '/front_assets/js/isotope.pkgd.min.js',
@@ -398,6 +392,73 @@ import getUrlList from "../provider.js";
          this.getCartData();
      },
      methods:{
+         async removeCartData(product_id,product_attr_id,qty){
+             try {
+                 let data = await axios.post(getUrlList().removeCartData, {
+                     'token': this.user_info.user_id,
+                     'auth': this.user_info.auth,
+                     'product_id':product_id,
+                     'product_attr_id':product_attr_id,
+                     'qty':qty,
+                 });
+                 if (data.status === 200) {
+                     this.getCartData();
+                 } else {
+                     console.log('Data not found');
+                 }
+             } catch (error) {
+                 console.log('Error in getUserData:', error);
+             }
+         },
+         async addToCart(product_id, product_attr_id, qty) {
+             try {
+                 // Kiểm tra nếu sản phẩm đã có trong giỏ hàng hay chưa
+                 let existingProduct = this.cartProduct.find(item =>
+                     item.product_id === product_id && item.product_attr_id === product_attr_id
+                 );
+
+                 if (existingProduct) {
+                     // Nếu sản phẩm đã có trong giỏ hàng, tăng số lượng
+                     existingProduct.qty += qty;
+                     await this.updateCartData(product_id, product_attr_id, existingProduct.qty);
+                 } else {
+                     // Nếu sản phẩm chưa có trong giỏ hàng, thêm sản phẩm mới
+                     let data = await axios.post(getUrlList().addToCart, {
+                         'token': this.user_info.user_id,
+                         'auth': this.user_info.auth,
+                         'product_id': product_id,
+                         'product_attr_id': product_attr_id,
+                         'qty': qty,
+                     });
+                     if (data.status === 200) {
+                         this.getCartData();
+                     } else {
+                         console.log('Data not found');
+                     }
+                 }
+             } catch (error) {
+                 console.log('Error in addToCart:', error);
+             }
+         },
+         async updateCartData(product_id, product_attr_id, qty) {
+             try {
+                 let data = await axios.post(getUrlList().updateCartData, {
+                     'token': this.user_info.user_id,
+                     'auth': this.user_info.auth,
+                     'product_id': product_id,
+                     'product_attr_id': product_attr_id,
+                     'qty': qty,
+                 });
+                 if (data.status === 200) {
+                     this.getCartData(); // Lấy lại dữ liệu giỏ hàng sau khi cập nhật
+                 } else {
+                     console.log('Data not found');
+                 }
+             } catch (error) {
+                 console.log('Error in updateCartData:', error);
+             }
+         },
+
          async getCartData(){
              try {
                  let data = await axios.post(getUrlList().getCartData, {
@@ -405,7 +466,8 @@ import getUrlList from "../provider.js";
                      'auth': this.user_info.auth,
                  });
                  if (data.status === 200) {
-
+                     this.cartCount = data.data.data.data.length;
+                     this.cartProduct = data.data.data.data;
                  } else {
                      console.log('Data not found');
                  }

@@ -1,195 +1,21 @@
 
 <template>
 <Layout>
-   <template v-slot:content>
+   <template v-slot:content="slotProps">
        <!-- slider-area -->
-       <section class="slider-area position-relative">
-           <div class="third-slider-active">
-
-               <div v-for="item in homeBanner" :key="item.id" class="third-slider-item third-slider-bg"  data-background="/front_assets/img/slider/third_slider_bg.jpg">
-                   <div class="container custom-container-two">
-                       <div class="third-slider-wrap">
-                           <div class="row align-items-center">
-                               <div class="col-lg-6">
-                                   <div class="slider-content">
-                                       <h3 class="sub-title" data-animation-in="fadeInUp" data-delay-in=".2" data-duration-in="1.5">best offer !</h3>
-                                       <h2 class="title" data-animation-in="fadeInUp" data-delay-in=".4" data-duration-in="1.5">
-                                           {{ item.text }}</h2>
-                                       <p data-animation-in="fadeInUp" data-delay-in=".6" data-duration-in="1.5">Get up to 50% off Today Only</p>
-                                       <a href="shop-sidebar.html" class="btn" data-animation-in="fadeInUp" data-delay-in=".8" data-duration-in="1.5">Shop now</a>
-                                   </div>
-                               </div>
-                               <div class="col-lg-6">
-                                   <div class="third-slider-img">
-                                       <div class="img-shape" data-background="/front_assets/img/slider/third_slide_shape.png" data-animation-in="zoomIn"
-                                            data-delay-in="1" data-duration-in="1.5"></div>
-                                       <img :src="`/images/homeBanner/${item.image}`" style="height: 537px; width: 560px" alt="" class="main-img" data-animation-in="slideInRight2"
-                                            data-delay-in="1" data-duration-in="1.5">
-                                   </div>
-                               </div>
-                           </div>
-                       </div>
-                   </div>
-               </div>
-
-           </div>
-       </section>
+       <HomeBanner :homeBanner="homeBanner" />
        <!-- slider-area-end -->
 
-
-
     <!-- shoes-category-area -->
-    <div class="shoes-category-area pt-80 pb-30">
-        <div class="container custom-container-two">
-            <div class="row justify-content-center">
-
-                <div v-for="item in getShortArray(3)" :key="item.id" class="col-lg-4 col-md-6 col-sm-9">
-                    <div class="shoes-cat-item mb-50">
-                        <div class="thumb mb-30">
-                            <a href="shop-sidebar.html"><img :src="`/images/categories/${item.image}`" alt=""></a>
-                        </div>
-                        <div class="content">
-                            <ul>
-                                <li><a href="shop-sidebar.html">{{ item.name}}</a></li>
-                                <li><span>18</span></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- shoes-category-area-end -->
+       <Category :categories="getShortArray(3)" />
+       <!-- shoes-category-area-end -->
 
     <!-- trending-product-area -->
-    <section class="trending-product-area trending-product-two gray-bg pt-95 pb-100">
-        <div class="container custom-container">
-            <div class="row justify-content-center">
-                <div class="col-xl-4 col-lg-6">
-                    <div class="section-title title-style-two text-center mb-50">
-                        <h3 class="title">Trending Products</h3>
-                    </div>
-                </div>
-            </div>
-            <div class="row no-gutters trending-product-grid">
-                <div class="col-2">
-                    <div class="trending-products-list">
-                        <h5>Category</h5>
-                        <ul class="nav nav-tabs" id="trendingTab" role="tablist">
-
-                            <li v-for="(catItem,index) in getShortArray(5)" :key="catItem.id" class="nav-item" role="presentation">
-                                <a :class="'nav-link'+ showActiveClass(1, index)" :id="'cat-tab'+catItem.id" data-toggle="tab" :href="'#cat'+catItem.id"
-                                   role="tab" :aria-controls="'cat'+catItem.id" aria-selected="true">
-                                    {{ catItem.name }}
-                                </a>
-                            </li>
-
-                        </ul>
-                        <p class="offer"><a href="#">Limited-Time Offer!</a></p>
-                    </div>
-                </div>
-                <div class="col-10">
-                    <div class="tab-content tp-tab-content" id="trendingTabContent">
-                        <div v-for="(catItem,index) in getShortArray(5)" :key="catItem.id" :class="'tab-pane '+ showActiveClass(2, index) "
-                             :id="'cat'+catItem.id" role="tabpanel" :aria-labelledby="'cat-tab'+catItem.id">
-                            <div class="trending-products-banner banner-animation">
-                                <a href="shop-sidebar.html"><img :src="`/images/categories/${catItem.image}`" height="440px" alt=""></a>
-                            </div>
-                            <div v-if="catItem.products.length > 0" class="row trending-product-active">
-                                <div v-for="item in catItem.products" class="col">
-                                    <div class="features-product-item">
-                                        <div class="features-product-thumb">
-                                            <div class="discount-tag">-20%</div>
-                                            <a href="shop-details.html">
-                                                <img :src="`/images/products/${item.image}`" alt="">
-                                            </a>
-                                            <div class="product-overlay-action">
-                                                <ul>
-                                                    <li><a href="cart.html"><i class="far fa-heart"></i></a></li>
-                                                    <li><a href="shop-details.html"><i class="far fa-eye"></i></a></li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                        <div class="features-product-content">
-                                            <div class="rating">
-                                                <i class="far fa-star"></i>
-                                                <i class="far fa-star"></i>
-                                                <i class="far fa-star"></i>
-                                                <i class="far fa-star"></i>
-                                                <i class="far fa-star"></i>
-                                            </div>
-                                            <h5><a href="shop-details.html">{{item.name}}</a></h5>
-                                            <p class="price">
-                                                {{ item.product_attributes && item.product_attributes.length > 0 ? item.product_attributes[0].price : 'N/A' }}$
-                                            </p>
-                                            <div class="features-product-bottom">
-                                                <ul>
-                                                    <li class="color-option">
-                                                        <span class="gray"></span>
-                                                        <span class="cyan"></span>
-                                                        <span class="orange"></span>
-                                                    </li>
-                                                    <li class="limited-time"><a href="#">Limited-Time Offer!</a></li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                        <div class="features-product-cart"><a href="cart.html">add to cart</a></div>
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+       <TrendingProduct :categories="getShortArray(9)" :showActiveClass="showActiveClass" :addToCart="slotProps.addToCart" />
     <!-- trending-product-area-end -->
 
     <!-- new-arrival-area -->
-    <section class="new-arrival-area pt-95 pb-45">
-        <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-xl-4 col-lg-6">
-                    <div class="section-title title-style-two text-center mb-45">
-                        <h3 class="title">New Arrival Collection</h3>
-                    </div>
-                </div>
-            </div>
-            <div class="row justify-content-center">
-                <div class="col-lg-6">
-                    <div class="new-arrival-nav mb-35">
-                        <button v-for="(catItem,index) in getShortArray(5)" :key="catItem.id"
-                                :class="''+showActiveClass(1, index)" :data-filter="'.cat-'+catItem.id">{{ catItem.name }}
-                        </button>
-                    </div>
-                </div>
-            </div>
-            <div class="row new-arrival-active">
-                <div v-for="item in homeProducts" :class="'col-xl-3 col-lg-4 col-sm-6 grid-item grid-sizer cat-'+item.category_id">
-                    <div class="new-arrival-item text-center mb-50">
-                        <div class="thumb mb-25">
-                            <a href="shop-details.html"><img :src="`/images/products/${item.image}`" alt=""></a>
-                            <div class="product-overlay-action">
-                                <ul>
-                                    <li><a href="cart.html"><i class="far fa-heart"></i></a></li>
-                                    <li><a href="shop-details.html"><i class="far fa-eye"></i></a></li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="content">
-                            <h5><a href="shop-details.html">{{ item.name }}</a></h5>
-                            <span class="price">
-                               {{ item.product_attributes && item.product_attributes.length > 0 ? item.product_attributes[0].price : 'N/A' }}$
-                            </span>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </section>
+       <NewArrival :categories="getShortArray(9)" :products="homeProducts" :showActiveClass="showActiveClass" :addToCart="slotProps.addToCart" />
     <!-- new-arrival-area-end -->
 
     <!-- shoes-banner-area -->
@@ -277,22 +103,7 @@
     <!-- promo-services-end -->
 
     <!-- instagram-post-area -->
-    <div class="instagram-post-area">
-        <div class="container-fluid p-0 fix">
-            <div class="row no-gutters insta-active">
-
-                <div v-for="item in homeBrands" class="col">
-                    <div class="insta-post-item">
-                        <a href="#">
-                            <i class="fab fa-instagram"></i>
-                            <img :src="`/images/brand/${item.image}`" alt="">
-                        </a>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </div>
+     <HomeBrand :brands="homeBrands" />
     <!-- instagram-post-area-end -->
    </template>
 </Layout>
@@ -301,10 +112,20 @@
 import Layout from './Layout.vue'
 import axios from 'axios';
 import getUrlList from "../provider.js";
+import HomeBanner from'./components/HomeBanner.vue'
+import Category from './components/Category.vue'
+import TrendingProduct from './components/TrendingProduct.vue'
+import NewArrival from './components/NewArrival.vue'
+import HomeBrand from './components/HomeBrand.vue'
 export default {
     name:'Index',
     components:{
-         Layout
+         Layout,
+        HomeBanner,
+        Category,
+        TrendingProduct,
+        NewArrival,
+        HomeBrand
     },
     data(){
         return{
@@ -321,13 +142,13 @@ export default {
     methods:{
         showActiveClass(type,index){
             // type 1 = 1 -> cat , type ==2 product
-          if(type == 1 && index == 0){
-              return 'active';
-          }else if(type == 2 && index == 1){
-              return 'show active';
-          }else{
-              return '';
-          }
+            if(type == 1 && index == 0){
+                return 'active';
+            }else if(type == 2 && index == 1){
+                return 'show active';
+            }else{
+                return '';
+            }
         },
         getShortArray(size){
             return this.homeCategories.slice(0,size);

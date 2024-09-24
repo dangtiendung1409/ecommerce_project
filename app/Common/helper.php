@@ -10,6 +10,7 @@ function replaceStr($str)
 {
     return preg_replace('/\s+/', '_', $str);
 }
+
 function checkTokenExpiryInMinutes($time , $timeDiff = 60) {
 //    prx($time);
     $data = Carbon::parse($time->format('y-m-d h:i:s a'));
@@ -22,13 +23,16 @@ function checkTokenExpiryInMinutes($time , $timeDiff = 60) {
     }else{
         return false;
     }
-    function generateRandomString($length = 20){
-        $ch = '0123456789abcdefghijklmnopqrstwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-        $len = strlen($ch);
-        $str = '';
-        for($i = 0; $i<$length;$i++){
-            $str .=$ch[random_int(0,$len-1)];
-        }
-        return $str;
+
+
+}
+
+function generateRandomString($length = 20){
+    $ch = '0123456789abcdefghijklmnopqrstwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    $len = strlen($ch);
+    $str = '';
+    for($i = 0; $i<$length;$i++){
+        $str .=$ch[random_int(0,$len-1)];
     }
+    return $str;
 }

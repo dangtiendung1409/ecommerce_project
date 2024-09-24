@@ -152,7 +152,88 @@ class HomePageController extends Controller
             return $this->success(['data' => $data], 'Successfully data fetched');
         }
     }
+    public function addToCart(Request $request)
+    {
+        $validation = Validator::make($request->all(), [
+            'token' => 'required|exists:temp_users,token',
+            'product_id' => 'required|exists:products,id',
+            'product_attr_id' => 'required|exists:product_attrs,id',
+            'qty' => 'required|numeric|min:0|not_in:0',
 
+        ]);
+        if ($validation->fails()) {
+            return response()->json(['status' => 'error', 'message' => $validation->errors()], 400);
+        } else {
+            $user = TempUsers::where('token', $request->token)->first();
+            Cart::updateOrCreate(
+                ['user_id'=>$user->user_id,'product_id'=>$request->product_id,
+                'product_attr_id'=>$request->product_attr_id],
+                ['user_id'=>$user->user_id,'product_id'=>$request->product_id,
+                    'product_attr_id'=>$request->product_attr_id,'qty'=>$request->qty,'user_type'=>$user->user_type]
+            );
+            return $this->success(['data' => ''], 'Successfully data fetched');
+        }
+    }
+    public function updateCartData(Request $request)
+    {
+        $validation = Validator::make($request->all(), [
+            'token' => 'required|exists:temp_users,token',
+            'product_id' => 'required|exists:products,id',
+            'product_attr_id' => 'required|exists:product_attrs,id',
+            'qty' => 'required|numeric|min:0|not_in:0',
+        ]);
+
+        if ($validation->fails()) {
+            return response()->json(['status' => 'error', 'message' => $validation->errors()], 400);
+        }
+
+        // Tìm người dùng dựa vào token
+        $user = TempUsers::where('token', $request->token)->first();
+
+        // Tìm giỏ hàng và cập nhật số lượng sản phẩm
+        $cartItem = Cart::where('user_id', $user->user_id)
+            ->where('product_id', $request->product_id)
+            ->where('product_attr_id', $request->product_attr_id)
+            ->first();
+
+        if ($cartItem) {
+            $cartItem->qty = $request->qty;
+            $cartItem->save();
+
+            return $this->success(['data' => 'Cart updated successfully'], 'Successfully data fetched');
+        }
+
+        return response()->json(['status' => 'error', 'message' => 'Product not found in cart'], 404);
+    }
+
+    public function removeCartData(Request $request){
+        $validation = Validator::make($request->all(), [
+            'token' => 'required|exists:temp_users,token',
+            'product_id' => 'required|exists:products,id',
+            'product_attr_id' => 'required|exists:product_attrs,id',
+            'qty' => 'required|numeric|min:0|not_in:0',
+
+        ]);
+        if ($validation->fails()) {
+            return response()->json(['status' => 'error', 'message' => $validation->errors()], 400);
+        } else {
+            $user = TempUsers::where('token', $request->token)->first();
+            $cart = Cart::where(['user_id'=>$user->user_id,'product_id'=>$request->product_id,
+                'product_attr_id'=>$request->product_attr_id])->first();
+         if(isset($cart->id)){
+             $qty = $request->qty;
+             if($cart->qty == $qty){
+                 $cart->delete();
+             }elseif($cart->qty > $qty){
+                 $cart->qty -=$qty;
+                 $cart->save();
+             }else{
+                 $cart->delete();
+             }
+         }
+            return $this->success(['data' => ''], 'Successfully data fetched');
+        }
+    }
 //    public function changeSlug(){
 //        $data = Product::get();
 //        foreach ($data as $list){
