@@ -1,3 +1,4 @@
+
 <template>
     <!-- preloader  -->
 <!--    <div id="preloader">-->
@@ -42,8 +43,8 @@
                         <div class="menu-wrap">
                             <nav class="menu-nav show">
                                 <div class="logo">
-                                    <a href="index.html" class="main-logo"><img src="/front_assets/img/logo/fw_logo.png" alt="Logo"></a>
-                                    <a href="index.html" class="sticky-logo"><img src="/front_assets/img/logo/logo.png" alt="Logo"></a>
+                                    <router-link :to="'/'" href="index.html" class="main-logo"><img src="/front_assets/img/logo/fw_logo.png" alt="Logo"></router-link>
+                                    <router-link :to="'/'" class="sticky-logo"><img src="/front_assets/img/logo/logo.png" alt="Logo"></router-link>
                                 </div>
                                 <div class="navbar-wrap main-menu d-none d-lg-flex">
                                     <ul class="navigation">

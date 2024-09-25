@@ -17,16 +17,18 @@ function preloader() {
 	}
 }
 
-$(window).on('load', function () {
-	preloader();
-	mainSliderActive();
-	thirdSlider();
-	h9Slider();
-	wowAnimation();
-});
-
-
-
+// $(window).on('load', function () {
+//
+// });
+function loadFrame()
+{
+    preloader();
+    mainSliderActive();
+    thirdSlider();
+    h9Slider();
+    wowAnimation();
+}
+window.onload = loadFrame();
 /*=============================================
 	=    		Mobile Menu			      =
 =============================================*/
