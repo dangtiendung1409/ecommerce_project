@@ -412,34 +412,39 @@ import getUrlList from "../provider.js";
              }
          },
          async addToCart(product_id, product_attr_id, qty) {
-             try {
-                 // Kiểm tra nếu sản phẩm đã có trong giỏ hàng hay chưa
-                 let existingProduct = this.cartProduct.find(item =>
-                     item.product_id === product_id && item.product_attr_id === product_attr_id
-                 );
+             if(product_id == '' || product_attr_id == '' || qty =='' || qty<1){
+                 alert('Select Color or qty');
+             }else{
+                 try {
+                     // Kiểm tra nếu sản phẩm đã có trong giỏ hàng hay chưa
+                     let existingProduct = this.cartProduct.find(item =>
+                         item.product_id === product_id && item.product_attr_id === product_attr_id
+                     );
 
-                 if (existingProduct) {
-                     // Nếu sản phẩm đã có trong giỏ hàng, tăng số lượng
-                     existingProduct.qty += qty;
-                     await this.updateCartData(product_id, product_attr_id, existingProduct.qty);
-                 } else {
-                     // Nếu sản phẩm chưa có trong giỏ hàng, thêm sản phẩm mới
-                     let data = await axios.post(getUrlList().addToCart, {
-                         'token': this.user_info.user_id,
-                         'auth': this.user_info.auth,
-                         'product_id': product_id,
-                         'product_attr_id': product_attr_id,
-                         'qty': qty,
-                     });
-                     if (data.status === 200) {
-                         this.getCartData();
+                     if (existingProduct) {
+                         // Nếu sản phẩm đã có trong giỏ hàng, tăng số lượng
+                         existingProduct.qty += qty;
+                         await this.updateCartData(product_id, product_attr_id, existingProduct.qty);
                      } else {
-                         console.log('Data not found');
+                         // Nếu sản phẩm chưa có trong giỏ hàng, thêm sản phẩm mới
+                         let data = await axios.post(getUrlList().addToCart, {
+                             'token': this.user_info.user_id,
+                             'auth': this.user_info.auth,
+                             'product_id': product_id,
+                             'product_attr_id': product_attr_id,
+                             'qty': qty,
+                         });
+                         if (data.status === 200) {
+                             this.getCartData();
+                         } else {
+                             console.log('Data not found');
+                         }
                      }
+                 } catch (error) {
+                     console.log('Error in addToCart:', error);
                  }
-             } catch (error) {
-                 console.log('Error in addToCart:', error);
              }
+
          },
          async updateCartData(product_id, product_attr_id, qty) {
              try {

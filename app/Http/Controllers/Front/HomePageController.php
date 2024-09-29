@@ -234,6 +234,17 @@ class HomePageController extends Controller
             return $this->success(['data' => ''], 'Successfully data fetched');
         }
     }
+    public function getProductData($item_code ='',$slug=''){
+         $product = Product::where(['item_code'=>$item_code,'slug'=>$slug])->first();
+
+         if(isset($product->id)){
+             $data = Product::where(['item_code'=>$item_code,'slug'=>$slug])->with('productAttributes')->first();
+//             prx($data);
+             return $this->success(['data' => $data], 'Successfully data fetched');
+         }else{
+             return $this->error('Product not found', 400, []);
+         }
+    }
 //    public function changeSlug(){
 //        $data = Product::get();
 //        foreach ($data as $list){
