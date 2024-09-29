@@ -196,73 +196,20 @@
                                 </div>
                             </div>
                             <div class="row related-product-active">
-                                <div class="col-xl-3">
+                                <div v-for="item in otherProducts" :key="item.id" class="col-xl-3">
                                     <div class="new-arrival-item text-center">
                                         <div class="thumb mb-25">
-                                            <a href="shop-details.html"><img src="img/product/n_arrival_product01.jpg" alt=""></a>
+                                            <router-link :to="'/product/' + item.item_code + '/'+item.slug"><img :src="`/images/products/${item.image}`" alt=""></router-link>
                                             <div class="product-overlay-action">
                                                 <ul>
-                                                    <li><a href="cart.html"><i class="far fa-heart"></i></a></li>
+                                                    <li><a href="javascript:void(0)" v-on:click="slotProps.addToCart(item.id,item.product_attributes[0].id,1)"><i class="far fa-heart"></i></a></li>
                                                     <li><a href="shop-details.html"><i class="far fa-eye"></i></a></li>
                                                 </ul>
                                             </div>
                                         </div>
                                         <div class="content">
-                                            <h5><a href="shop-details.html">Bomber in Cotton</a></h5>
-                                            <span class="price">$37.00</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-xl-3">
-                                    <div class="new-arrival-item text-center">
-                                        <div class="thumb mb-25">
-                                            <div class="discount-tag">- 20%</div>
-                                            <a href="shop-details.html"><img src="img/product/n_arrival_product02.jpg" alt=""></a>
-                                            <div class="product-overlay-action">
-                                                <ul>
-                                                    <li><a href="cart.html"><i class="far fa-heart"></i></a></li>
-                                                    <li><a href="shop-details.html"><i class="far fa-eye"></i></a></li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                        <div class="content">
-                                            <h5><a href="shop-details.html">Travelling Bags</a></h5>
-                                            <span class="price">$25.00</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-xl-3">
-                                    <div class="new-arrival-item text-center">
-                                        <div class="thumb mb-25">
-                                            <a href="shop-details.html"><img src="img/product/n_arrival_product03.jpg" alt=""></a>
-                                            <div class="product-overlay-action">
-                                                <ul>
-                                                    <li><a href="cart.html"><i class="far fa-heart"></i></a></li>
-                                                    <li><a href="shop-details.html"><i class="far fa-eye"></i></a></li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                        <div class="content">
-                                            <h5><a href="shop-details.html">Exclusive Handbags</a></h5>
-                                            <span class="price">$19.50</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-xl-3">
-                                    <div class="new-arrival-item text-center">
-                                        <div class="thumb mb-25">
-                                            <div class="discount-tag new">New</div>
-                                            <a href="shop-details.html"><img src="img/product/n_arrival_product04.jpg" alt=""></a>
-                                            <div class="product-overlay-action">
-                                                <ul>
-                                                    <li><a href="cart.html"><i class="far fa-heart"></i></a></li>
-                                                    <li><a href="shop-details.html"><i class="far fa-eye"></i></a></li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                        <div class="content">
-                                            <h5><a href="shop-details.html">Women Shoes</a></h5>
-                                            <span class="price">$12.90</span>
+                                            <h5><router-link :to="'/product/' + item.item_code + '/'+item.slug">{{item.name}}</router-link></h5>
+                                            <span class="price">${{ item.product_attributes[0].price }}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -304,13 +251,14 @@ export default {
             color:{id:'',text:'',product_attr_id:''},
             sizeColor: 'sizeColor',
             colorColor: 'colorColor',
-            qty:1
+            qty:1,
+            otherProducts: []
         }
     },
     watch: {
         '$route'()
         {
-            this.getProducts();
+            this.getProduct();
         },
         qty(val){
             if(val == 0 || val < 1){
@@ -357,6 +305,7 @@ export default {
                     console.log(data.data.data.data);
                     if (data.status == 200 && data.data.data.data != undefined) {
                         this.product = data.data.data.data;
+                        this.otherProducts = data.data.data.data.otherProducts;
                         for(var item in this.product.product_attributes){
                             for(var subItem in this.product.product_attributes[item].images){
                                 this.images.push(this.product.product_attributes[item].images[subItem])

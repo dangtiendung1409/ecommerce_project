@@ -114,7 +114,7 @@
                                                 </li>
                                                 <li>
                                                     <div class="checkout-link">
-                                                        <a href="#">Shopping Cart</a>
+                                                        <router-link :to="'/ShoppingCart'">Shopping Cart</router-link>
                                                         <a class="black-color" href="#">Checkout</a>
                                                     </div>
                                                 </li>
@@ -280,7 +280,11 @@
     </header>
     <!-- main-area -->
     <main>
-        <slot name="content" :addToCart="addToCart">
+        <slot name="content" :addToCart="addToCart"
+              :cartCount="cartCount"
+              :cartProduct="cartProduct"
+              :cartTotal="cartTotal"
+              :removeCartData="removeCartData">
 
         </slot>
     </main>
@@ -412,21 +416,25 @@ import getUrlList from "../provider.js";
              }
          },
          async addToCart(product_id, product_attr_id, qty) {
-             if(product_id == '' || product_attr_id == '' || qty =='' || qty<1){
-                 alert('Select Color or qty');
-             }else{
+             if (product_id == '' || product_attr_id == '' || qty == '' || qty < 1) {
+                 alert('Vui lòng chọn số lượng hợp lệ');
+             } else {
                  try {
-                     // Kiểm tra nếu sản phẩm đã có trong giỏ hàng hay chưa
+                     // Kiểm tra xem sản phẩm đã tồn tại trong giỏ hàng hay chưa
                      let existingProduct = this.cartProduct.find(item =>
-                         item.product_id === product_id && item.product_attr_id === product_attr_id
+                         item.products[0].id === product_id && item.products[0].product_attributes[0].id === product_attr_id
                      );
 
                      if (existingProduct) {
-                         // Nếu sản phẩm đã có trong giỏ hàng, tăng số lượng
-                         existingProduct.qty += qty;
+                         // Nếu sản phẩm đã có trong giỏ hàng và qty là 1 (khi ấn vào nút giỏ hàng), chỉ tăng số lượng
+                         if (qty === 1) {
+                             existingProduct.qty += 1; // Chỉ tăng số lượng thêm 1
+                         } else {
+                             existingProduct.qty = qty; // Cập nhật số lượng nếu người dùng sử dụng nút +/-
+                         }
                          await this.updateCartData(product_id, product_attr_id, existingProduct.qty);
                      } else {
-                         // Nếu sản phẩm chưa có trong giỏ hàng, thêm sản phẩm mới
+                         // Thêm sản phẩm mới vào giỏ hàng
                          let data = await axios.post(getUrlList().addToCart, {
                              'token': this.user_info.user_id,
                              'auth': this.user_info.auth,
@@ -435,17 +443,16 @@ import getUrlList from "../provider.js";
                              'qty': qty,
                          });
                          if (data.status === 200) {
-                             this.getCartData();
+                             this.getCartData(); // Lấy lại dữ liệu giỏ hàng sau khi thêm sản phẩm mới
                          } else {
-                             console.log('Data not found');
+                             console.log('Không tìm thấy dữ liệu');
                          }
                      }
                  } catch (error) {
-                     console.log('Error in addToCart:', error);
+                     console.log('Lỗi khi thêm vào giỏ hàng:', error);
                  }
              }
-
-         },
+     },
          async updateCartData(product_id, product_attr_id, qty) {
              try {
                  let data = await axios.post(getUrlList().updateCartData, {

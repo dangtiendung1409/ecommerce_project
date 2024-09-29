@@ -57,7 +57,7 @@
                                     <div v-for="item in products" :key="item.id" class="col-xl-4 col-sm-6">
                                         <div class="new-arrival-item text-center mb-50">
                                             <div class="thumb mb-25">
-                                                <a href="shop-details.html"><img :src="`/images/products/${item.image}`" alt=""></a>
+                                                <router-link :to="'/product/' + item.item_code + '/'+item.slug"><img :src="`/images/products/${item.image}`" alt=""></router-link>
                                                 <div class="product-overlay-action">
                                                     <ul>
                                                         <li><a href="cart.html"><i class="far fa-heart"></i></a></li>
@@ -66,7 +66,7 @@
                                                 </div>
                                             </div>
                                             <div v-if="item.product_attributes && item.product_attributes.length > 0" class="content">
-                                                <h5><a href="shop-details.html">{{ item.name }}</a></h5>
+                                                <h5><router-link :to="'/product/' + item.item_code + '/'+item.slug">{{ item.name }}</router-link></h5>
                                                 <span class="price">${{ item.product_attributes[0].price }}</span>
                                             </div>
                                             <div v-else class="content">
