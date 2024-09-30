@@ -44,6 +44,13 @@
             </a>
         </li>
         <li>
+            <a href="{{url('admin/manage_coupon')}}">
+                <div class="parent-icon"><i class='bx bx-brush'></i>
+                </div>
+                <div class="menu-title">Manage Coupon</div>
+            </a>
+        </li>
+        <li>
             <a href="{{url('admin/brand')}}">
                 <div class="parent-icon"><i class='bx bx-brush'></i>
                 </div>

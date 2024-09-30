@@ -284,7 +284,9 @@
               :cartCount="cartCount"
               :cartProduct="cartProduct"
               :cartTotal="cartTotal"
-              :removeCartData="removeCartData">
+              :removeCartData="removeCartData"
+              :addCoupon="addCoupon"
+        >
 
         </slot>
     </main>
@@ -364,7 +366,8 @@ import getUrlList from "../provider.js";
              },
              cartCount:0,
              cartProduct:[],
-             cartTotal:0
+             cartTotal:0,
+             oldCart:0
          }
      },
      watch: {
@@ -373,6 +376,7 @@ import getUrlList from "../provider.js";
              for (var item in val) {
                  this.cartTotal += val[item].qty * val[item].products[0].product_attributes[0].price;
              }
+             this.oldCart = this.cartTotal;
          }
      },
 
@@ -397,6 +401,23 @@ import getUrlList from "../provider.js";
          this.getCartData();
      },
      methods:{
+         async addCoupon(coupon){
+             try {
+                 let data = await axios.post(getUrlList().addCoupon, {
+                     'token': this.user_info.user_id,
+                     'auth': this.user_info.auth,
+                     'cartTotal':this.oldCart,
+                     'coupon':coupon,
+                 });
+                 if (data.status === 200) {
+                     this.cartTotal = data.data.data.data;
+                 } else {
+                     console.log('Data not found');
+                 }
+             } catch (error) {
+                 console.log('Error in addCoupon:', error.response ? error.response.data : error);
+             }
+         },
          async removeCartData(product_id,product_attr_id,qty){
              try {
                  let data = await axios.post(getUrlList().removeCartData, {

@@ -8,6 +8,7 @@ use App\Models\Cart;
 use App\Models\Category;
 use App\Models\CategoryAttribute;
 use App\Models\Color;
+use App\Models\Coupon;
 use App\Models\HomeBanner;
 use App\Models\Product;
 use App\Models\ProductAttr;
@@ -246,6 +247,32 @@ class HomePageController extends Controller
          }else{
              return $this->error('Product not found', 400, []);
          }
+    }
+    public function addCoupon(Request $request){
+        $validation = Validator::make($request->all(), [
+            'coupon' => 'required|exists:coupons,name',
+
+        ]);
+        if ($validation->fails()) {
+            return response()->json(['status' => 'error', 'message' => $validation->errors()], 400);
+        } else {
+            $coupon = Coupon::where('name',$request->coupon)->first();
+            if($coupon->minValue <= $request->cartTotal){
+                $couponValue = $coupon->value;
+                if($coupon->type == 1){
+                   // coupon id of value type
+                    $cartotal = $request->cartTotal - $couponValue;
+                }else{
+                    // coupon is of percentage type
+                    $couponValue = $couponValue / 100;
+                    $couponValue = $request->cartTotal * $couponValue;
+                    $cartotal = $request->cartTotal - $couponValue;
+                }
+                return $this->success(['data' => $cartotal], 'Successfully data fetched');
+            }else{
+                return $this->error('Coupon not found', 400, []);
+            }
+        }
     }
 //    public function changeSlug(){
 //        $data = Product::get();

@@ -11,6 +11,7 @@ use App\Http\Controllers\Admin\sizeController;
 use App\Http\Controllers\Admin\colorController;
 use App\Http\Controllers\Admin\attributeController;
 use App\Http\Controllers\Admin\categoryController;
+use App\Http\Controllers\Admin\couponController;
 Route::get('/dashboard', function () {
     return view('admin/index');
 });
@@ -62,6 +63,9 @@ Route::post('/updateProduct',[productController::class,'store']);
 Route::post('/getAttributes',[productController::class,'getAttributes']);
 Route::post('/removeAttrId',[productController::class,'removeAttrId']);
 
+// manage coupon
+Route::get('/manage_coupon',[couponController::class,'index']);
+Route::post('/updateCoupon',[couponController::class,'store']);
 // delete data
 Route::get('/deleteData/{id?}/{table?}',[dashboardController::class,'deleteData']);
 

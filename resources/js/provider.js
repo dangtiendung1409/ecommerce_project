@@ -11,6 +11,7 @@ const baseUrl = 'http://127.0.0.1:8000/api';
           addToCart : ''+baseUrl+'/addToCart',
           updateCartData : ''+baseUrl+'/updateCartData',
           removeCartData : ''+baseUrl+'/removeCartData',
+          addCoupon : ''+baseUrl+'/addCoupon',
       }
 }
 export default getUrlList;
