@@ -10,13 +10,17 @@ use App\Models\CategoryAttribute;
 use App\Models\Color;
 use App\Models\Coupon;
 use App\Models\HomeBanner;
+use App\Models\Pincode;
 use App\Models\Product;
 use App\Models\ProductAttr;
+use App\Models\Role;
 use App\Models\Size;
 use App\Models\TempUsers;
+use App\Models\User;
 use App\Models\UserCouponCart;
 use Illuminate\Http\Request;
 use App\Traits\ApiResponse;
+use Illuminate\Support\Facades\Hash;
 use Validator;
 
 class HomePageController extends Controller
@@ -348,6 +352,51 @@ class HomePageController extends Controller
             }
             return $this->success(['data'=> $cartotal,'couponName'=>$couponName], 'Successfully data fetched');
         }
+    }
+    public function getPincodeDetails(Request $request){
+        $validation = Validator::make($request->all(), [
+            'token' => 'required|exists:temp_users,token',
+            'pincode' => 'required|exists:pincodes,Pincode',
+
+        ]);
+        if ($validation->fails()) {
+            return response()->json(['status' => 'error', 'message' => $validation->errors()], 400);
+        } else {
+             $data = Pincode::where('Pincode',$request->pincode)->first();
+            return $this->success(['data'=> $data], 'Successfully data fetched');
+        }
+
+    }
+    public function placeOrder(Request $request){
+        $validation = Validator::make($request->all(), [
+            'token' => 'required|exists:temp_users,token',
+            'pincode' => 'required|exists:pincodes,Pincode',
+            'firstName' => 'required|string|max:255',
+            'lastName' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
+            'country' => 'required|string|max:255',
+            'city' => 'required|string|max:255',
+            'state' => 'required|string|max:255',
+            'phone' => 'required|numeric',
+        ]);
+        if ($validation->fails()) {
+            return response()->json(['status' => 'error', 'message' => $validation->errors()], 400);
+        } else {
+
+           $user_id = $this->createUser($request->all());
+            return $this->success(['data'=> $data], 'Successfully data fetched');
+        }
+    }
+    public function createUser($data){
+         $user = User::create([
+             'name'=>$data['firstName'].' '.$data['lastName'],
+             'password'=>Hash::make(''.$data['firstName'].'@123'),
+             'email'=>$data['email']
+         ]);
+        $customer = Role::where('slug','customer')->first();
+
+        $user->roles()->attach($customer);
+        return $user->id;
     }
 //    public function changeSlug(){
 //        $data = Product::get();

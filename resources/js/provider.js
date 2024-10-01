@@ -14,6 +14,8 @@ const baseUrl = 'http://127.0.0.1:8000/api';
           addCoupon : ''+baseUrl+'/addCoupon',
           removeCoupon : ''+baseUrl+'/removeCoupon',
           getUserCoupon : ''+baseUrl+'/getUserCoupon',
+          getPincodeDetails :''+baseUrl+'/getPincodeDetails',
+          placeOrder:''+baseUrl+'/placeOrder',
       }
 }
 export default getUrlList;

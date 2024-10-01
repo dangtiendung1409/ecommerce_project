@@ -51,3 +51,5 @@ Route::post('/removeCartData', [HomePageController::class, 'removeCartData']);
 Route::post('/addCoupon', [HomePageController::class, 'addCoupon']);
 Route::post('/removeCoupon', [HomePageController::class, 'removeCoupon']);
 Route::post('/getUserCoupon', [HomePageController::class, 'getUserCoupon']);
+Route::post('/getPincodeDetails', [HomePageController::class, 'getPincodeDetails']);
+Route::post('/placeOrder', [HomePageController::class, 'placeOrder']);
