@@ -286,6 +286,9 @@
               :cartTotal="cartTotal"
               :removeCartData="removeCartData"
               :addCoupon="addCoupon"
+              :getCartData="getCartData"
+              :removeCoupon="removeCoupon"
+              :couponName="couponName"
         >
 
         </slot>
@@ -367,7 +370,8 @@ import getUrlList from "../provider.js";
              cartCount:0,
              cartProduct:[],
              cartTotal:0,
-             oldCart:0
+             oldCart:0,
+             couponName:''
          }
      },
      watch: {
@@ -377,6 +381,7 @@ import getUrlList from "../provider.js";
                  this.cartTotal += val[item].qty * val[item].products[0].product_attributes[0].price;
              }
              this.oldCart = this.cartTotal;
+             this.getUserCoupon();
          }
      },
 
@@ -401,6 +406,38 @@ import getUrlList from "../provider.js";
          this.getCartData();
      },
      methods:{
+         async removeCoupon(){
+             try {
+                 let data = await axios.post(getUrlList().removeCoupon, {
+                     'token': this.user_info.user_id,
+                     'auth': this.user_info.auth,
+                 });
+                 if (data.status === 200) {
+
+                 } else {
+                     console.log('Data not found');
+                 }
+             } catch (error) {
+                 console.log('Error in addCoupon:', error.response ? error.response.data : error);
+             }
+         },
+         async getUserCoupon(){
+             try {
+                 let data = await axios.post(getUrlList().getUserCoupon, {
+                     'token': this.user_info.user_id,
+                     'auth': this.user_info.auth,
+                     'cartTotal':this.oldCart,
+                 });
+                 if (data.status === 200) {
+                     this.cartTotal = data.data.data.data;
+                     this.couponName = data.data.data.couponName;
+                 } else {
+                     console.log('Data not found');
+                 }
+             } catch (error) {
+                 console.log('Error in addCoupon:', error.response ? error.response.data : error);
+             }
+         },
          async addCoupon(coupon){
              try {
                  let data = await axios.post(getUrlList().addCoupon, {
@@ -411,6 +448,7 @@ import getUrlList from "../provider.js";
                  });
                  if (data.status === 200) {
                      this.cartTotal = data.data.data.data;
+                     this.couponName = data.data.data.couponName;
                  } else {
                      console.log('Data not found');
                  }

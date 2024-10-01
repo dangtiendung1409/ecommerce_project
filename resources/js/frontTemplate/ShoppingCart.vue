@@ -74,12 +74,12 @@
                                     <div class="shop-cart-bottom mt-20">
                                         <div class="cart-coupon">
                                             <form action="#">
-                                                <input type="text" placeholder="Enter Coupon Code..." v-model="coponName">
-                                                <button type="button" class="btn" @click="slotProps.addCoupon(coponName)">Apply Coupon</button>
+                                                <input type="text" placeholder="Enter Coupon Code..." ref="couponName" :value="slotProps.couponName">
+                                                <button type="button" class="btn" @click="slotProps.addCoupon(this.$refs.couponName.value)">Apply Coupon</button>
                                             </form>
                                         </div>
                                         <div class="continue-shopping">
-                                            <a href="shop.html" class="btn">update shopping</a>
+                                            <a href="javascript:void(0)" @click="slotProps.getCartData(),slotProps.removeCoupon(),this.$refs.couponName.value=''" class="btn">Remove Coupon</a>
                                         </div>
                                     </div>
                                 </div>
